@@ -1,4 +1,4 @@
-package com.lechampalamaison.api.model;
+package com.lechampalamaison.api.model.apiResponse;
 
 public class AuthResponse {
     private int code;

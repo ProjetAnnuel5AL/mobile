@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Le champ a la maison</string>
+    <!--Key shared pref -->
+    <string name="isLoggedin_key">isLoggedin</string>
+    <string name="token_key">token</string>
+    <string name="login_key">login</string>
+    <string name="type_key">type</string>
+    <string name="cart_key">cart</string>
+    <string name="paypal_key">paypal</string>
 </resources>
