@@ -104,16 +104,16 @@ public class LoginActivity extends AppCompatActivity {
                     String jsonCart = new Gson().toJson(arrayListCart);
                     ArrayList<Paypal> arrayListPaypal = new ArrayList<Paypal>();
                     String jsonPaypal = new Gson().toJson(arrayListPaypal);*/
-
-                    SharedPreferences sharedPref = LoginActivity.this.getPreferences(Context.MODE_PRIVATE);
+                    public static final String PREFS_NAME_USER = "USER";
+                    SharedPreferences sharedPref = LoginActivity.this.getPreferences(PREFS_NAME_USER,Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
 
                     editor.putBoolean(getString(R.string.isLoggedin_key), true);
                     editor.putString(getString(R.string.login_key), response.body().getResult().getLoginUser());
                     editor.putInt(getString(R.string.type_key), response.body().getResult().getTypeUser());
                     editor.putString(getString(R.string.token_key), response.body().getResult().getToken());
-                    editor.putString(getString(R.string.cart_key), null);
-                    editor.putString(getString(R.string.paypal_key), null);
+                  //  editor.putString(getString(R.string.cart_key), null);
+                   // editor.putString(getString(R.string.paypal_key), null);
 
                     editor.commit();
                     onLoginSuccess();
