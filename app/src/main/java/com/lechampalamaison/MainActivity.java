@@ -13,29 +13,26 @@ import com.lechampalamaison.activity.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String PREFS_NAME_USER = "USER";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-public static final String PREFS_NAME_USER = "USER";
-        SharedPreferences sharedPref = this.getPreferences(PREFS_NAME_USER,Context.MODE_PRIVATE);
+
+        SharedPreferences sharedPref = this.getSharedPreferences(PREFS_NAME_USER ,Context.MODE_PRIVATE);
         boolean isLogged = sharedPref.getBoolean(getString(R.string.isLoggedin_key), false);
         String token = sharedPref.getString(getString(R.string.token_key), "");
         String login = sharedPref.getString(getString(R.string.login_key), "");
         int type = sharedPref.getInt(getString(R.string.type_key), 0);
-        System.out.println(token);
-        System.out.println(login);
-        System.out.println(type);
 
         Intent intent;
 
         if(isLogged == false){
             intent = new Intent(this, LoginActivity.class);
-        }else{
-            intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         }
 
-        startActivity(intent);
     }
 
     @Override

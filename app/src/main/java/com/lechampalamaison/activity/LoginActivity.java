@@ -31,6 +31,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class LoginActivity extends AppCompatActivity {
+
+    public static final String PREFS_NAME_USER = "USER";
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     public ProgressDialog progressDialog;
@@ -105,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                     ArrayList<Paypal> arrayListPaypal = new ArrayList<Paypal>();
                     String jsonPaypal = new Gson().toJson(arrayListPaypal);*/
 
-                    SharedPreferences sharedPref = LoginActivity.this.getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences("USER", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
 
                     editor.putBoolean(getString(R.string.isLoggedin_key), true);
