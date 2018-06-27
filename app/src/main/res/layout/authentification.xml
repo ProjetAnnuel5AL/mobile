@@ -57,4 +57,14 @@
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="160dp"
+        android:layout_height="18dp"
+        android:background="@android:color/holo_blue_light"
+        android:text="Inscription"
+        android:textColor="@android:color/white"
+        tools:layout_editor_absoluteX="113dp"
+        tools:layout_editor_absoluteY="315dp" />
+
 </android.support.constraint.ConstraintLayout>
