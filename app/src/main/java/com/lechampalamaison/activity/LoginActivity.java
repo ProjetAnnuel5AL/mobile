@@ -120,8 +120,14 @@ public class LoginActivity extends AppCompatActivity {
                     editor.commit();
                     onLoginSuccess();
                 }else{
-                    Toast.makeText(LoginActivity.this, "Erreur combinaison identifiant/mot de passe.", Toast.LENGTH_SHORT).show();
-                    onLoginFailed();
+                    if(response.body().getCode() == 5){
+                        Toast.makeText(LoginActivity.this, "Erreur : Votre compte n'a pas encore été validé. Merci de l'activer en suivant le lien que nous vous avons envoyé par mail.", Toast.LENGTH_SHORT).show();
+                        onLoginFailed();
+                    }else{
+                        Toast.makeText(LoginActivity.this, "Erreur combinaison identifiant/mot de passe.", Toast.LENGTH_SHORT).show();
+                        onLoginFailed();
+                    }
+
                 }
             }
             @Override
