@@ -1,4 +1,4 @@
-package com.lechampalamaison.api.activity;
+package com.lechampalamaison.activity;
 
 
 import android.app.ProgressDialog;

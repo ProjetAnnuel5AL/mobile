@@ -1,4 +1,4 @@
-package com.lechampalamaison.api.activity;
+package com.lechampalamaison.activity;
 
 
 import android.app.ProgressDialog;
@@ -15,16 +15,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.lechampalamaison.R;
-import com.lechampalamaison.api.model.Cart;
 import com.lechampalamaison.api.model.Login;
-import com.lechampalamaison.api.model.Paypal;
 import com.lechampalamaison.api.model.apiResponse.AuthResponse;
 import com.lechampalamaison.api.service.UserClient;
 import com.lechampalamaison.api.utils.Configuration;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

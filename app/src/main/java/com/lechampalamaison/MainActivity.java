@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.lechampalamaison.api.activity.LoginActivity;
+import com.lechampalamaison.activity.LoginActivity;
 
 
 public class MainActivity extends AppCompatActivity {

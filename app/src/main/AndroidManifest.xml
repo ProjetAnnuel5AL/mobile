@@ -19,10 +19,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".api.activity.SignupActivity"
+            android:name=".activity.SignupActivity"
             android:theme="@style/AppTheme.Dark" />
         <activity
-            android:name=".api.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:theme="@style/AppTheme.Dark" />
     </application>
 
