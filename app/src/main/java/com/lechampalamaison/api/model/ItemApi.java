@@ -22,7 +22,7 @@ public class ItemApi {
         this.limit = limit;
     }
 
-    public ItemApi(String manualSearch, String category, String product, Double lat, Double lng, Double priceMin, Double priceMax, int limit) {
+    public ItemApi(int limit, String manualSearch, String category, String product, Double lat, Double lng, Double priceMin, Double priceMax) {
         this.manualSearch = manualSearch;
         this.category = category;
         this.product = product;

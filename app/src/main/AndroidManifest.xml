@@ -26,7 +26,8 @@
             android:theme="@style/AppTheme.Dark" />
         <activity
             android:name=".activity.HomeActivity"
-            android:label="@string/title_activity_home"></activity>
+            android:label="@string/title_activity_home"
+            android:theme="@style/CustomTheme"></activity>
     </application>
 
 </manifest>

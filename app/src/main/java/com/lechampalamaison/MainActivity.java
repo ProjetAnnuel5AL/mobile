@@ -32,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
         if(isLogged == false){
             intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+            finish();
         }else{
             intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
+            finish();
         }
 
     }

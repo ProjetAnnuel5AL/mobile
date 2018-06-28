@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.lechampalamaison.R;
 import com.lechampalamaison.model.Item;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.text.NumberFormat;
@@ -33,14 +34,14 @@ public class ListShopArrayAdapter  extends ArrayAdapter<Item> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
 
-
-
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_item, parent, false);
-        //ImageView imageView = (ImageView)rowView.findViewById(R.id.imageView);
-        new DownloadImageTask((ImageView)rowView.findViewById(R.id.imageView))
+        ImageView imageView = (ImageView)rowView.findViewById(R.id.imageView);
+        Picasso.get().load(values.get(position).getUrlMainImg()).into(imageView);
+        /*new DownloadImageTask((ImageView)rowView.findViewById(R.id.imageView))
                 .execute(values.get(position).getUrlMainImg());
+        Picasso.with(MainActivity.this).load(imgURL).into(ivmage);*/
         TextView textViewTitle = (TextView) rowView.findViewById(R.id.textViewTitle);
         TextView textViewDesk = (TextView) rowView.findViewById(R.id.textViewDesk);
         TextView textViewLocal = (TextView) rowView.findViewById(R.id.TextViewLoca);
@@ -78,7 +79,9 @@ public class ListShopArrayAdapter  extends ArrayAdapter<Item> {
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+            if(result != null) {
+                bmImage.setImageBitmap(result);
+            }
         }
     }
 }
