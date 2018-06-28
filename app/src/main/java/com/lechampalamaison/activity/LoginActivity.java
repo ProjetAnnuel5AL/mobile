@@ -127,7 +127,6 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Erreur combinaison identifiant/mot de passe.", Toast.LENGTH_SHORT).show();
                         onLoginFailed();
                     }
-
                 }
             }
             @Override

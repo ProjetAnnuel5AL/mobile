@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.lechampalamaison.activity.HomeActivity;
 import com.lechampalamaison.activity.LoginActivity;
 
 
@@ -30,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
         if(isLogged == false){
             intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }else{
+            intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }
 
