@@ -3,6 +3,7 @@ package com.lechampalamaison.fragement;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.lechampalamaison.R;
+import com.lechampalamaison.activity.HomeActivity;
 import com.lechampalamaison.api.model.ItemApi;
 import com.lechampalamaison.api.model.apiResponse.ItemsResponse;
 import com.lechampalamaison.api.service.ItemClient;
@@ -111,16 +113,25 @@ public class ShopFragment extends Fragment {
         adapter = new ListShopArrayAdapter(getContext(), listItem);
 
         ItemApi itemApi = new ItemApi(0);
-        //updateListView(itemApi, false);
-        filter();
+        updateListView(itemApi, false);
+        //filter();
         listViewItem.setAdapter(adapter);
         listViewItem.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3)
             {
-                Toast.makeText(getContext(), listItem.get(position).getTitle(),
-                        Toast.LENGTH_SHORT).show();
+
+                /*Toast.makeText(getContext(), listItem.get(position).getTitle(),
+                        Toast.LENGTH_SHORT).show();*/
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", listItem.get(position).getId() );
+                ItemFragment itemFragment = new ItemFragment();
+                itemFragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content, itemFragment)
+                        .addToBackStack(null)
+                        .commit();
 
             }
         });
@@ -191,4 +202,6 @@ public class ShopFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
 }
