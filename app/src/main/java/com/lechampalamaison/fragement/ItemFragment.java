@@ -7,8 +7,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.lechampalamaison.R;
 import com.lechampalamaison.api.model.apiResponse.ItemResponse;
 import com.lechampalamaison.api.model.apiResponse.ItemsResponse;
@@ -17,7 +24,13 @@ import com.lechampalamaison.api.utils.Configuration;
 import com.lechampalamaison.model.Item;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
+import ahmed.easyslider.EasySlider;
+import ahmed.easyslider.SliderItem;
+import ir.apend.slider.model.Slide;
+import ir.apend.slider.ui.Slider;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,7 +45,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Use the {@link ItemFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ItemFragment extends Fragment {
+public class ItemFragment extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -61,15 +74,11 @@ public class ItemFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ItemFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
+    private MapView mapView;
+    private GoogleMap gmap;
+    final LatLng HOUSTON = new LatLng(29.7628, -95.3831);
+
     public static ItemFragment newInstance(String param1, String param2) {
         ItemFragment fragment = new ItemFragment();
         Bundle args = new Bundle();
@@ -89,17 +98,50 @@ public class ItemFragment extends Fragment {
     }
 
     @Override
+    public void onMapReady(GoogleMap map) {
+        gmap = map;
+
+        // Creating a marker
+        MarkerOptions markerOptions = new MarkerOptions();
+
+        // Setting the position for the marker
+        markerOptions.position(HOUSTON);
+
+
+        markerOptions.title(HOUSTON.latitude + " : " + HOUSTON.longitude);
+        gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(HOUSTON, 15));
+        gmap.addMarker(markerOptions);
+    }
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_item, container, false);
-        titleItem = (TextView) view.findViewById(R.id.titleItem);
+        Slider slider = view.findViewById(R.id.slider);
+
+//create list of slides
+        List<Slide> slideList = new ArrayList<>();
+        slideList.add(new Slide(0,"http://vps536743.ovh.net:8888/itemPhotos/3/0.jpg" , getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
+        slideList.add(new Slide(1,"http://cssslider.com/sliders/demo-12/data1/images/picjumbo.com_hnck1995.jpg" , getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
+        slideList.add(new Slide(2,"http://cssslider.com/sliders/demo-19/data1/images/picjumbo.com_hnck1588.jpg" , getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
+        slideList.add(new Slide(3,"http://wowslider.com/sliders/demo-18/data1/images/shanghai.jpg" , getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
+        slider.addSlides(slideList);
+
+        Bundle mapViewBundle = null;
+        mapView = (MapView) view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this);
+
+
+
+  /*      titleItem = (TextView) view.findViewById(R.id.titleItem);
         catProductItem = (TextView) view.findViewById(R.id.catProductItem);
         producerInfoItem = (TextView) view.findViewById(R.id.producerInfoItem);
         priceItem = (TextView) view.findViewById(R.id.priceItem);
         descriptionItem = (TextView) view.findViewById(R.id.descriptionItem);
 
-
+        // key :
 
         int idItem = this.getArguments().getInt("id");
 
@@ -128,7 +170,7 @@ public class ItemFragment extends Fragment {
             public void onFailure(Call<ItemResponse> call, Throwable t) {
             }
         });
-
+*/
         return view;
     }
 
