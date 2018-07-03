@@ -28,9 +28,14 @@
     </style>
 
     <style name="CustomTheme" parent="Theme.AppCompat.Light">
-
         <item name="contentInsetStart">0dp</item>
         <item name="contentInsetEnd">0dp</item>
+    </style>
+
+    <style name="Theme.MaterialButton" parent="AppTheme">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/colorPrimaryDark</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 
 </resources>
