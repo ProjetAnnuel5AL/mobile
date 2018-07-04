@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(getString(R.string.cart_key), null);
                     editor.putString(getString(R.string.paypal_key), null);
 
-                    editor.commit();
+                    editor.apply();
                     onLoginSuccess();
                 }else{
                     if(response.body().getCode() == 5){

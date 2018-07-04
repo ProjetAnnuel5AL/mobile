@@ -174,7 +174,7 @@ public class SignupActivity extends AppCompatActivity {
         String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[&\"'(\\-_)=+?\\.^$])(?=\\S+$).{8,}$";
 
 
-        if (password.isEmpty() || password.length() < 8 || Pattern.matches(regex, password) == false ) {
+        if (password.isEmpty() || password.length() < 8 || !Pattern.matches(regex, password)) {
             _passwordText.setError("Mot de passe invalide : 8 caractères minimum, au moins une majuscule et une minuscule, un chiffre et un caractère spéciale ( parmis les suivants : &\\\"'(-_)=+?.^$ ) sont requis ! ");
             valid = false;
         } else {
