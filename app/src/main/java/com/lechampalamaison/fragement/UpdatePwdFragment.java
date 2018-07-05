@@ -2,7 +2,6 @@ package com.lechampalamaison.fragement;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,14 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.lechampalamaison.R;
-import com.lechampalamaison.activity.HomeActivity;
 import com.lechampalamaison.api.model.Login;
-import com.lechampalamaison.api.model.Update;
+import com.lechampalamaison.api.model.User;
 import com.lechampalamaison.api.model.apiResponse.AuthResponse;
 import com.lechampalamaison.api.model.apiResponse.UpdateResponse;
 import com.lechampalamaison.api.service.UserClient;
@@ -148,7 +145,7 @@ public class UpdatePwdFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+        // TODO: User argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
@@ -176,8 +173,8 @@ public class UpdatePwdFragment extends Fragment {
         Login login = new Login(loginUser, odlPwd);
         Call<AuthResponse> call = userClient.login(login);
 
-        Update update = new Update(loginUser, token, password, null);
-        Call<UpdateResponse> call2 = userClient.update(update);
+        User user = new User(loginUser, token, password, null, null, null, null, null, null, null);
+        Call<UpdateResponse> call2 = userClient.update(user);
 
         call.enqueue(new Callback<AuthResponse>() {
             @Override

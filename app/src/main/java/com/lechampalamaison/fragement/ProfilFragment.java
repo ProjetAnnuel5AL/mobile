@@ -16,13 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lechampalamaison.R;
-import com.lechampalamaison.api.model.Update;
+import com.lechampalamaison.api.model.User;
 import com.lechampalamaison.api.model.apiResponse.FindEmailResponse;
 import com.lechampalamaison.api.model.apiResponse.UpdateResponse;
 import com.lechampalamaison.api.service.UserClient;
 import com.lechampalamaison.api.utils.Configuration;
-
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -137,7 +135,7 @@ public class ProfilFragment extends Fragment {
 
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+        // TODO: User argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
@@ -189,7 +187,7 @@ public class ProfilFragment extends Fragment {
         }
 
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Modification du mot de passe ...");
+        progressDialog.setMessage("Modification de votre adresse mail ...");
         progressDialog.show();
 
         String mail = _mailNewText.getText().toString();
@@ -199,8 +197,8 @@ public class ProfilFragment extends Fragment {
         String token = sharedPref.getString(getString(R.string.token_key), "");
         String loginUser = sharedPref.getString(getString(R.string.login_key), "");
 
-        Update update = new Update(loginUser, token, null, mail);
-        Call<UpdateResponse> call = userClient.update(update);
+        User user = new User(loginUser, token, null, mail, null, null, null, null, null, null);
+        Call<UpdateResponse> call = userClient.update(user);
 
         call.enqueue(new Callback<UpdateResponse>() {
             @Override
@@ -234,7 +232,7 @@ public class ProfilFragment extends Fragment {
     public void onUpdateMailSuccess() {
         progressDialog.dismiss();
         getActivity().setResult(getActivity().RESULT_OK, null);
-        Toast.makeText(getContext(), "Adresse mail modifié avec succès.", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Adresse mail modifiée avec succès.", Toast.LENGTH_LONG).show();
         getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 

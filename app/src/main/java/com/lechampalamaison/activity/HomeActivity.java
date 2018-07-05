@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.support.v7.app.ActionBar;
 
 import com.lechampalamaison.R;
+import com.lechampalamaison.fragement.AddressFragment;
 import com.lechampalamaison.fragement.ProfilFragment;
 import com.lechampalamaison.fragement.ShopFragment;
 import com.lechampalamaison.fragement.UpdatePwdFragment;
@@ -53,7 +54,7 @@ public class HomeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
         View view =getSupportActionBar().getCustomView();
-        showFragment(new ProfilFragment());
+        showFragment(new AddressFragment());
 
     }
     private void showFragment(Fragment fragment) {
