@@ -17,24 +17,31 @@
             android:id="@+id/textView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:text="Modifier mon  mot de passe" />
+            android:text="Mon profil" />
 
-        <!-- Password Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_weight="1">
 
-            <EditText
-                android:id="@+id/input_password_old"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/loginTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Ancien mot de passe"
-                android:inputType="textPassword" />
+                android:layout_weight="1"
+                android:text="Identifiant : " />
+
+            <TextView
+                android:id="@+id/loginLoadTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Label -->
@@ -44,12 +51,44 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
 
+            <TextView
+                android:id="@+id/mailTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Adresse mail : " />
+
+            <TextView
+                android:id="@+id/mailLoadTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Password Label -->
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="Modifier mon adresse mail" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+
             <EditText
-                android:id="@+id/input_password_new"
+                android:id="@+id/input_mail_new"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nouveau mot de passe"
-                android:inputType="textPassword" />
+                android:hint="Nouvelle adresse mail"
+                android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Re-enter Label -->
@@ -60,22 +99,22 @@
             android:layout_marginBottom="8dp">
 
             <EditText
-                android:id="@+id/input_reEnterPassword_new"
+                android:id="@+id/input_reEnterMail"
                 android:layout_width="match_parent"
                 android:layout_height="41dp"
-                android:hint="Confirmer le mot de passe "
-                android:inputType="textPassword" />
+                android:hint="Confirmer l'adresse mail "
+                android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
         <!-- Signup Button -->
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_update_pwd"
+            android:id="@+id/btn_update_mail"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_marginTop="24dp"
             android:padding="12dp"
-            android:text="Modifier mon mot de passe" />
+            android:text="Modifier mon mail" />
 
     </LinearLayout>
 </ScrollView>

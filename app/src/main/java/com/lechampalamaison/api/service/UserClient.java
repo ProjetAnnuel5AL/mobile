@@ -1,6 +1,7 @@
 package com.lechampalamaison.api.service;
 
 import com.lechampalamaison.api.model.Update;
+import com.lechampalamaison.api.model.apiResponse.FindEmailResponse;
 import com.lechampalamaison.api.model.apiResponse.SignupResponse;
 import com.lechampalamaison.api.model.apiResponse.AuthResponse;
 import com.lechampalamaison.api.model.Login;
@@ -9,7 +10,9 @@ import com.lechampalamaison.api.model.apiResponse.UpdateResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface UserClient {
 
@@ -21,4 +24,8 @@ public interface UserClient {
 
     @POST("user/update")
     Call<UpdateResponse> update(@Body Update update);
+
+    @GET("user/findEmail")
+    Call<FindEmailResponse> findEmail(@Query("loginUser") String loginUser, @Query("token") String token );
+
 }

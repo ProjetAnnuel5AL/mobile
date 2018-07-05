@@ -4,12 +4,16 @@ public class Update {
     private String loginUser;
     private String passwordUser;
     private String token;
+    private String emailUser;
 
-    public Update(String loginUser, String passwordUser, String token) {
+    public Update(String loginUser, String token, String passwordUser, String emailUser) {
         this.loginUser = loginUser;
         this.passwordUser = passwordUser;
         this.token = token;
+        this.emailUser= emailUser;
     }
+
+
 
     public String getLoginUser() {
         return loginUser;
@@ -33,5 +37,13 @@ public class Update {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getEmailUser() {
+        return emailUser;
+    }
+
+    public void setEmailUser(String emailUser) {
+        this.emailUser = emailUser;
     }
 }

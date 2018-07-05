@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.support.v7.app.ActionBar;
 
 import com.lechampalamaison.R;
+import com.lechampalamaison.fragement.ProfilFragment;
 import com.lechampalamaison.fragement.ShopFragment;
 import com.lechampalamaison.fragement.UpdatePwdFragment;
 
@@ -25,7 +26,7 @@ public class HomeActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_producer:
-                    showFragment(new UpdatePwdFragment());
+
                     return true;
                 case R.id.navigation_item:
                     showFragment(new ShopFragment());
@@ -52,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
         View view =getSupportActionBar().getCustomView();
-
+        showFragment(new ProfilFragment());
 
     }
     private void showFragment(Fragment fragment) {

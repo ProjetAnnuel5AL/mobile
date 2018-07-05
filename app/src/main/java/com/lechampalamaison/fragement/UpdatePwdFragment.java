@@ -176,7 +176,7 @@ public class UpdatePwdFragment extends Fragment {
         Login login = new Login(loginUser, odlPwd);
         Call<AuthResponse> call = userClient.login(login);
 
-        Update update = new Update(loginUser, password, token);
+        Update update = new Update(loginUser, token, password, null);
         Call<UpdateResponse> call2 = userClient.update(update);
 
         call.enqueue(new Callback<AuthResponse>() {
