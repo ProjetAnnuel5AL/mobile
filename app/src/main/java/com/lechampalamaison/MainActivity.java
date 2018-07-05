@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import com.lechampalamaison.activity.HomeActivity;
 import com.lechampalamaison.activity.LoginActivity;
 
+import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,11 +27,16 @@ public class MainActivity extends AppCompatActivity {
         boolean isLogged = sharedPref.getBoolean(getString(R.string.isLoggedin_key), false);
         String token = sharedPref.getString(getString(R.string.token_key), "");
         String login = sharedPref.getString(getString(R.string.login_key), "");
+        long date = sharedPref.getLong(getString(R.string.date_token_key),0 );
         int type = sharedPref.getInt(getString(R.string.type_key), 0);
+
+        long milisDay = 86400000;
+        Date dateToday = new Date(System.currentTimeMillis()); //or simply new Date();
+        long millisToday = dateToday.getTime();
 
         Intent intent;
 
-        if(isLogged == false){
+        if(isLogged == false || millisToday - date >  milisDay){
             intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();

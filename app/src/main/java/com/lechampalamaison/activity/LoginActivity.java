@@ -15,11 +15,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lechampalamaison.MainActivity;
 import com.lechampalamaison.R;
 import com.lechampalamaison.api.model.Login;
 import com.lechampalamaison.api.model.apiResponse.AuthResponse;
 import com.lechampalamaison.api.service.UserClient;
 import com.lechampalamaison.api.utils.Configuration;
+
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -108,6 +111,11 @@ public class LoginActivity extends AppCompatActivity {
                     ArrayList<Paypal> arrayListPaypal = new ArrayList<Paypal>();
                     String jsonPaypal = new Gson().toJson(arrayListPaypal);*/
 
+                    //on sauvegarde la date pour la validé du token (24h)
+                    Date date = new Date(System.currentTimeMillis()); //or simply new Date();
+                    //converting it back to a milliseconds representation:
+                    long millis = date.getTime();
+
                     SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences("USER", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
 
@@ -115,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(getString(R.string.login_key), response.body().getResult().getLoginUser());
                     editor.putInt(getString(R.string.type_key), response.body().getResult().getTypeUser());
                     editor.putString(getString(R.string.token_key), response.body().getResult().getToken());
+                    editor.putLong(getString(R.string.date_token_key), millis);
                     editor.putString(getString(R.string.cart_key), null);
                     editor.putString(getString(R.string.paypal_key), null);
 
@@ -171,8 +180,8 @@ public class LoginActivity extends AppCompatActivity {
     public void onLoginSuccess() {
         progressDialog.dismiss();
         _loginButton.setEnabled(true);
-        /*Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-        startActivity(intent);*/
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
         finish();
     }
 

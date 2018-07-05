@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 
 import com.lechampalamaison.R;
 import com.lechampalamaison.fragement.ShopFragment;
+import com.lechampalamaison.fragement.UpdatePwdFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -24,6 +25,7 @@ public class HomeActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_producer:
+                    showFragment(new UpdatePwdFragment());
                     return true;
                 case R.id.navigation_item:
                     showFragment(new ShopFragment());
