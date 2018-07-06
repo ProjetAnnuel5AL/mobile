@@ -3,13 +3,20 @@ package com.lechampalamaison.model;
 import com.lechampalamaison.api.utils.Configuration;
 
 public class Item {
-    String urlMainImg;
+    private String urlMainImg;
     private int id;
     private String title;
     private String description;
     private String localisation;
     private double price;
-    private String fileExtensionsItem;
+
+    public Item() {}
+
+    public Item(String title, String description, double price) {
+        this.title = title;
+        this.description = description;
+        this.price = price;
+    }
 
     public Item(int id, String title, String description, String localisation, double prix, String fileExtensionsItem) {
         this.id = id;
@@ -17,7 +24,6 @@ public class Item {
         this.description = description;
         this.localisation = localisation;
         this.price = prix;
-        this.fileExtensionsItem = fileExtensionsItem;
         String[] ext = fileExtensionsItem.split(";");
         this.urlMainImg = Configuration.urlApi + "itemPhotos/" + id + "/0."+ext[0];
     }

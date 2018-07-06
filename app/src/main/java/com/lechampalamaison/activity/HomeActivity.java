@@ -1,5 +1,6 @@
 package com.lechampalamaison.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -24,6 +25,9 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.navigation_dashboard:
                 return true;
             case R.id.navigation_notifications:
+                Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+                startActivity(intent);
+                finish();
                 return true;
         }
 

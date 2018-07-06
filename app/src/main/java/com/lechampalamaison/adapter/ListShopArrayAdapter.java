@@ -1,4 +1,4 @@
-package com.lechampalamaison.listarrayadaper;
+package com.lechampalamaison.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;

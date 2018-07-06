@@ -3,22 +3,19 @@ package com.lechampalamaison.fragement;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.lechampalamaison.R;
-import com.lechampalamaison.activity.HomeActivity;
 import com.lechampalamaison.api.model.ItemApi;
 import com.lechampalamaison.api.model.apiResponse.ItemsResponse;
 import com.lechampalamaison.api.service.ItemClient;
 import com.lechampalamaison.api.utils.Configuration;
-import com.lechampalamaison.listarrayadaper.ListShopArrayAdapter;
+import com.lechampalamaison.adapter.ListShopArrayAdapter;
 import com.lechampalamaison.model.Item;
 
 import java.util.ArrayList;
