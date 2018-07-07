@@ -33,10 +33,11 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_cart"
-        android:layout_above="@+id/btn_placeorder"
-        android:layout_below="@+id/layout_total"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="308dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="55dp"
         android:scrollbars="vertical">
     </android.support.v7.widget.RecyclerView>
 
@@ -46,7 +47,9 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:layout_gravity="center"
+        android:layout_marginBottom="72dp"
         android:text="@string/btn_pladeorder"
         android:textColor="@android:color/white"
         android:theme="@style/Theme.MaterialButton">

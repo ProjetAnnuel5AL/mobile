@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.support.v7.app.ActionBar;
 
 import com.lechampalamaison.R;
+import com.lechampalamaison.fragement.CartFragment;
 import com.lechampalamaison.fragement.ShopFragment;
 
 public class HomeActivity extends AppCompatActivity {
@@ -25,9 +26,7 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.navigation_dashboard:
                 return true;
             case R.id.navigation_notifications:
-                Intent intent = new Intent(getApplicationContext(), CartActivity.class);
-                startActivity(intent);
-                finish();
+                showFragment(new CartFragment());
                 return true;
         }
 
