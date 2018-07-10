@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lechampalamaison.R;
+import com.lechampalamaison.api.utils.Configuration;
 import com.lechampalamaison.model.Item;
 import com.squareup.picasso.Picasso;
 
@@ -38,7 +39,8 @@ public class ListShopArrayAdapter  extends ArrayAdapter<Item> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.list_item, parent, false);
         ImageView imageView = (ImageView)rowView.findViewById(R.id.imageView);
-        Picasso.get().load(values.get(position).getUrlMainImg()).into(imageView);
+        String urlImg = Configuration.urlApi+"itemPhotos/"+values.get(position).getId()+"/img_resize/0_xs.jpg";
+        Picasso.get().load(urlImg).into(imageView);
         /*new DownloadImageTask((ImageView)rowView.findViewById(R.id.imageView))
                 .execute(values.get(position).getUrlMainImg());
         Picasso.with(MainActivity.this).load(imgURL).into(ivmage);*/

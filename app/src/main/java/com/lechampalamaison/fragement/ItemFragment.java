@@ -64,12 +64,12 @@ public class ItemFragment extends Fragment implements OnMapReadyCallback {
     Retrofit retrofit = builder.build();
     ItemClient itemClient = retrofit.create(ItemClient.class);
 
-    public TextView titleItem;
+    public TextView textViewTitre;
     public TextView catProductItem;
     public TextView producerInfoItem;
-    public TextView priceItem;
-    public TextView descriptionItem;
-
+    public TextView textViewPrice;
+    public TextView textViewDesc;
+    public TextView textViewPricePort;
     public ItemFragment() {
         // Required empty public constructor
     }
@@ -102,7 +102,7 @@ public class ItemFragment extends Fragment implements OnMapReadyCallback {
         gmap = map;
 
         // Creating a marker
-        MarkerOptions markerOptions = new MarkerOptions();
+        /*MarkerOptions markerOptions = new MarkerOptions();
 
         // Setting the position for the marker
         markerOptions.position(HOUSTON);
@@ -110,22 +110,36 @@ public class ItemFragment extends Fragment implements OnMapReadyCallback {
 
         markerOptions.title(HOUSTON.latitude + " : " + HOUSTON.longitude);
         gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(HOUSTON, 15));
+        gmap.addMarker(markerOptions);*/
+    }
+
+    public void setMapItem(Double lat, Double lng, String address, String city, String cp){
+        MarkerOptions markerOptions = new MarkerOptions();
+
+        // Setting the position for the marker
+        markerOptions.position(new LatLng(lat, lng));
+
+
+        markerOptions.title(lat + " : " + lng);
+        gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15));
         gmap.addMarker(markerOptions);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_item, container, false);
         Slider slider = view.findViewById(R.id.slider);
+        int idItem = this.getArguments().getInt("id");
 
-//create list of slides
+        textViewTitre = (TextView) view.findViewById(R.id.textViewTitre);
+        catProductItem = (TextView) view.findViewById(R.id.catProductItem);
+        producerInfoItem = (TextView) view.findViewById(R.id.producerInfoItem);
+        textViewPrice = (TextView) view.findViewById(R.id.textViewPrice);
+        textViewPricePort = (TextView) view.findViewById(R.id.textViewPricePort);
+        textViewDesc = (TextView) view.findViewById(R.id.textViewDesc);
         List<Slide> slideList = new ArrayList<>();
-        slideList.add(new Slide(0,"http://vps536743.ovh.net:8888/itemPhotos/3/0.jpg" , getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
-        slideList.add(new Slide(1,"http://cssslider.com/sliders/demo-12/data1/images/picjumbo.com_hnck1995.jpg" , getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
-        slideList.add(new Slide(2,"http://cssslider.com/sliders/demo-19/data1/images/picjumbo.com_hnck1588.jpg" , getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
-        slideList.add(new Slide(3,"http://wowslider.com/sliders/demo-18/data1/images/shanghai.jpg" , getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
-        slider.addSlides(slideList);
 
         Bundle mapViewBundle = null;
         mapView = (MapView) view.findViewById(R.id.mapView);
@@ -134,17 +148,6 @@ public class ItemFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
 
 
-
-  /*      titleItem = (TextView) view.findViewById(R.id.titleItem);
-        catProductItem = (TextView) view.findViewById(R.id.catProductItem);
-        producerInfoItem = (TextView) view.findViewById(R.id.producerInfoItem);
-        priceItem = (TextView) view.findViewById(R.id.priceItem);
-        descriptionItem = (TextView) view.findViewById(R.id.descriptionItem);
-
-        // key :
-
-        int idItem = this.getArguments().getInt("id");
-
         Call<ItemResponse> call;
         call = itemClient.item(idItem);
 
@@ -152,16 +155,26 @@ public class ItemFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onResponse(Call<ItemResponse> call, Response<ItemResponse> response) {
                 if(response.body().getCode() == 0){
-                    titleItem.setText(response.body().getResult().getInfoItem().getNameItem());
+                    textViewTitre.setText(response.body().getResult().getInfoItem().getNameItem());
                     catProductItem.setText(response.body().getResult().getInfoItem().getNameCategory()+", "+response.body().getResult().getInfoItem().getNameProduct());
                     producerInfoItem.setText(response.body().getResult().getInfoItem().getNameItem());
 
                     Double price = (double) Math.round(response.body().getResult().getInfoItem().getPriceItem() * 100) / 100;
-                    NumberFormat format= NumberFormat.getInstance();
+                    Double shippingCost = (double) Math.round(response.body().getResult().getInfoItem().getShippingCostItem() * 100) / 100;
+                    NumberFormat format = NumberFormat.getInstance();
                     format.setMinimumFractionDigits(2);
-                    priceItem.setText("Prix : " +format.format(price)  + "€");
+                    textViewPrice.setText(format.format(price)  + "€");
+                    textViewPricePort.setText("Frais de port :" +format.format(shippingCost)  + "€");
 
-                    descriptionItem.setText("Descirption :\n" + response.body().getResult().getInfoItem().getDescriptionItem());
+                    textViewDesc.setText(response.body().getResult().getInfoItem().getDescriptionItem());
+                    String[] ext = response.body().getResult().getInfoItem().getFileExtensionsItem().split(";");
+                    for(int i = 0; i<ext.length; i++){
+                        String url = Configuration.urlApi+"itemPhotos/"+idItem+"/"+i+"_ms.jpg";
+                        slideList.add(new Slide(i,Configuration.urlApi+"itemPhotos/"+idItem+"/img_resize/"+i+"_ms.jpg" , getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
+                    }
+
+                    slider.addSlides(slideList);
+
                 }else{
 
                 }
@@ -170,7 +183,8 @@ public class ItemFragment extends Fragment implements OnMapReadyCallback {
             public void onFailure(Call<ItemResponse> call, Throwable t) {
             }
         });
-*/
+
+
         return view;
     }
 

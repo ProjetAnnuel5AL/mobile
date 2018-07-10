@@ -73,7 +73,24 @@ public class ItemResponse {
             private String lastNameProducer;
             private String firstNameProducer;
             private String photoURL;
+            private Double shippingCostItem;
+            private Double quatityMaxOrderItem;
 
+            public Double getShippingCostItem() {
+                return shippingCostItem;
+            }
+
+            public void setShippingCostItem(Double shippingCostItem) {
+                this.shippingCostItem = shippingCostItem;
+            }
+
+            public Double getQuatityMaxOrderItem() {
+                return quatityMaxOrderItem;
+            }
+
+            public void setQuatityMaxOrderItem(Double quatityMaxOrderItem) {
+                this.quatityMaxOrderItem = quatityMaxOrderItem;
+            }
 
             public int getIdItem() {
                 return idItem;

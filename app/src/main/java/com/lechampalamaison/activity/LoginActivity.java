@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 import com.lechampalamaison.MainActivity;
 import com.lechampalamaison.R;
 import com.lechampalamaison.api.model.Login;
@@ -35,6 +37,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     public static final String PREFS_NAME_USER = "USER";
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
@@ -54,8 +58,16 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        FirebaseCrash.log("Activity created");
         super.onCreate(savedInstanceState);
+
+        // Obtain the FirebaseAnalytics instance.
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID,"1");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "coucou");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         progressDialog = new ProgressDialog(LoginActivity.this,
@@ -84,8 +96,11 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
         Log.d(TAG, "Login");
 
+
+
         if (!validate()) {
-            onLoginFailed();
+            progressDialog.dismiss();
+            _loginButton.setEnabled(true);
             return;
         }
 
@@ -128,21 +143,21 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(getString(R.string.paypal_key), null);
 
                     editor.commit();
-                    onLoginSuccess();
+                    onLoginSuccess(login.getLoginUser());
                 }else{
                     if(response.body().getCode() == 5){
                         Toast.makeText(LoginActivity.this, "Erreur : Votre compte n'a pas encore été validé. Merci de l'activer en suivant le lien que nous vous avons envoyé par mail.", Toast.LENGTH_SHORT).show();
-                        onLoginFailed();
+                        onLoginFailed(login.getLoginUser());
                     }else{
                         Toast.makeText(LoginActivity.this, "Erreur combinaison identifiant/mot de passe.", Toast.LENGTH_SHORT).show();
-                        onLoginFailed();
+                        onLoginFailed(login.getLoginUser());
                     }
                 }
             }
             @Override
             public void onFailure(Call<AuthResponse> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, "Erreur combinaison identifiant/mot de passe.", Toast.LENGTH_SHORT).show();
-                onLoginFailed();
+                onLoginFailed(login.getLoginUser());
             }
         });
 
@@ -177,7 +192,11 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
+    public void onLoginSuccess(String login) {
+        Bundle params = new Bundle();
+        params.putString("Utilisateur", login);
+        params.putString("Resultat", "Réussite");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, params);
         progressDialog.dismiss();
         _loginButton.setEnabled(true);
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
@@ -185,7 +204,11 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onLoginFailed() {
+    public void onLoginFailed(String login) {
+        Bundle params = new Bundle();
+        params.putString("Utilisateur", login);
+        params.putString("Resultat", "Echec");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, params);
         progressDialog.dismiss();
         _loginButton.setEnabled(true);
     }
