@@ -1,15 +1,26 @@
 package com.lechampalamaison.fragement;
 
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.lechampalamaison.R;
@@ -22,6 +33,7 @@ import com.lechampalamaison.listarrayadaper.ListShopArrayAdapter;
 import com.lechampalamaison.model.Item;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,23 +41,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ShopFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ShopFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
+
 public class ShopFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     ListView listViewItem;
     ListShopArrayAdapter adapter;
-    int pagination = 0;
+    public int pagination = 0;
     Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(Configuration.urlApi)
             .addConverterFactory(GsonConverterFactory.create());
@@ -53,9 +56,6 @@ public class ShopFragment extends Fragment {
     Retrofit retrofit = builder.build();
     ItemClient itemClient = retrofit.create(ItemClient.class);
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     ArrayList<Item> listItem;
 
     //filter
@@ -74,33 +74,18 @@ public class ShopFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ShopFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ShopFragment newInstance(String param1, String param2) {
-        ShopFragment fragment = new ShopFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
+    private PopupWindow mPopupWindow;
 
+    private FrameLayout mRelativeLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -151,6 +136,106 @@ public class ShopFragment extends Fragment {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             }
         });
+
+        mRelativeLayout = (FrameLayout) view.findViewById(R.id.fragment_shop);
+        View views =((AppCompatActivity)getActivity()).getSupportActionBar().getCustomView();
+        ImageButton img=(ImageButton)views.findViewById(R.id.action_bar_search);
+        img.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                // Initialize a new instance of LayoutInflater service
+                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+
+                // Inflate the custom layout/view
+                View customView = inflater.inflate(R.layout.filtre,null);
+
+                /*
+                    public PopupWindow (View contentView, int width, int height)
+                        Create a new non focusable popup window which can display the contentView.
+                        The dimension of the window must be passed to this constructor.
+
+                        The popup does not provide any background. This should be handled by
+                        the content view.
+
+                    Parameters
+                        contentView : the popup's content
+                        width : the popup's width
+                        height : the popup's height
+                */
+                // Initialize a new instance of popup window
+                mPopupWindow = new PopupWindow(
+                        customView,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+
+                // Set an elevation value for popup window
+                // Call requires API level 21
+                if(Build.VERSION.SDK_INT>=21){
+                    mPopupWindow.setElevation(5.0f);
+                }
+
+                // Get a reference for the custom view close button
+                ImageButton closeButton = (ImageButton) customView.findViewById(R.id.ib_close);
+                Button valideboutton = (Button) customView.findViewById(R.id.filtre_valider);
+                EditText nomEdittext = (EditText) customView.findViewById(R.id.editTextName);
+
+                // (1) get a reference to the spinner
+                Spinner spinnerCategory = (Spinner)customView.findViewById(R.id.spinnerCategory);
+
+                List<String> spinnerArray = new ArrayList<>();
+                spinnerArray.add("zz");
+                spinnerArray.add("zzz");
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                        getActivity(),
+                        android.R.layout.simple_spinner_item,
+                        spinnerArray
+                );
+
+
+                spinnerCategory.setAdapter(adapter);
+
+                // Set a click listener for the popup window close button
+                closeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Dismiss the popup window
+                        mPopupWindow.dismiss();
+                    }
+                });
+
+                valideboutton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Dismiss the popup window
+
+                        Toast.makeText(getActivity(),  nomEdittext.getText(), Toast.LENGTH_LONG).show();
+                    }
+                });
+                /*
+                    public void showAtLocation (View parent, int gravity, int x, int y)
+                        Display the content view in a popup window at the specified location. If the
+                        popup window cannot fit on screen, it will be clipped.
+                        Learn WindowManager.LayoutParams for more information on how gravity and the x
+                        and y parameters are related. Specifying a gravity of NO_GRAVITY is similar
+                        to specifying Gravity.LEFT | Gravity.TOP.
+
+                    Parameters
+                        parent : a parent view to get the getWindowToken() token from
+                        gravity : the gravity which controls the placement of the popup window
+                        x : the popup's x location offset
+                        y : the popup's y location offset
+                */
+                // Finally, show the popup window at the center location of root relative layout
+                mPopupWindow.showAtLocation( mRelativeLayout,Gravity.CENTER,0,0);
+                mPopupWindow.setFocusable(true);
+                mPopupWindow.update();
+            }
+        });
+
+
         return view;
     }
 
@@ -181,12 +266,13 @@ public class ShopFragment extends Fragment {
         });
     }
 
+
     public void filter(){
         //Mettre la récupération des inputs
 
         pagination = 0;
         listItem.clear();
-        ItemApi itemApi = new ItemApi(pagination, "BON", null, null, null, null, null, null);
+        ItemApi itemApi = new ItemApi(0, "BON", null, null, null, null, null, null);
         updateListView(itemApi, true);
 
     }
@@ -202,6 +288,7 @@ public class ShopFragment extends Fragment {
         // TODO: User argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 
 
 }

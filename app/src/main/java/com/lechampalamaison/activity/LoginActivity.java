@@ -14,9 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+/*
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.crash.FirebaseCrash;*/
 import com.lechampalamaison.MainActivity;
 import com.lechampalamaison.R;
 import com.lechampalamaison.api.model.Login;
@@ -37,7 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private FirebaseAnalytics mFirebaseAnalytics;
+  //  private FirebaseAnalytics mFirebaseAnalytics;
 
     public static final String PREFS_NAME_USER = "USER";
     private static final String TAG = "LoginActivity";
@@ -58,15 +58,15 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        FirebaseCrash.log("Activity created");
+     //   FirebaseCrash.log("Activity created");
         super.onCreate(savedInstanceState);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         // Obtain the FirebaseAnalytics instance.
-        Bundle bundle = new Bundle();
+    /*    Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID,"1");
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "coucou");
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);*/
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
@@ -196,7 +196,7 @@ public class LoginActivity extends AppCompatActivity {
         Bundle params = new Bundle();
         params.putString("Utilisateur", login);
         params.putString("Resultat", "Réussite");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, params);
+      //  mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, params);
         progressDialog.dismiss();
         _loginButton.setEnabled(true);
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
@@ -208,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
         Bundle params = new Bundle();
         params.putString("Utilisateur", login);
         params.putString("Resultat", "Echec");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, params);
+       // mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, params);
         progressDialog.dismiss();
         _loginButton.setEnabled(true);
     }
