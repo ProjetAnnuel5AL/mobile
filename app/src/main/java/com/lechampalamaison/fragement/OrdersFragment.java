@@ -1,5 +1,7 @@
 package com.lechampalamaison.fragement;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,9 +13,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.lechampalamaison.R;
-import com.lechampalamaison.api.model.ItemApi;
+
+import com.lechampalamaison.api.model.apiResponse.FindOrdersResponse;
 import com.lechampalamaison.api.model.apiResponse.ItemsResponse;
 import com.lechampalamaison.api.service.ItemClient;
+import com.lechampalamaison.api.service.OrderClient;
 import com.lechampalamaison.api.utils.Configuration;
 import com.lechampalamaison.listarrayadaper.ListOrdersArrayAdapter;
 import com.lechampalamaison.listarrayadaper.ListShopArrayAdapter;
@@ -41,24 +45,23 @@ public class OrdersFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public static final String PREFS_NAME_USER = "USER";
 
     ListView listViewOrders;
     ListOrdersArrayAdapter adapter;
-    int pagination = 0;
+
+
     Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(Configuration.urlApi)
             .addConverterFactory(GsonConverterFactory.create());
 
     Retrofit retrofit = builder.build();
-
+    OrderClient orderClient = retrofit.create(OrderClient.class);
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     ArrayList<Order> listOrders;
-
-    //filter
-
 
     private OnFragmentInteractionListener mListener;
 
@@ -103,42 +106,41 @@ public class OrdersFragment extends Fragment {
         listViewOrders = (ListView)view.findViewById(R.id.listOrders);
 
         adapter = new ListOrdersArrayAdapter(getContext(), listOrders);
-
-
-        listOrders.add(new Order());
-
-        //filter();
         listViewOrders.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+
+        loadOrder();
 
         return view;
     }
 
-    public void updateListView(ItemApi itemApi, boolean filter){
+    public void loadOrder(){
 
-        /*Call<ItemsResponse> call;
-        if(filter == false){
-            call = itemClient.itemsWithoutFilter(itemApi.getLimit()*20);
-        }else{
-            call = itemClient.itemsFilter(itemApi.getLimit()*20, itemApi.getManualSearch(), itemApi.getCategory(), itemApi.getProduct(), itemApi.getLat(), itemApi.getLng(), itemApi.getPriceMin(), itemApi.getPriceMax());
-        }
+        Call<FindOrdersResponse> call;
 
-        call.enqueue(new Callback<ItemsResponse>() {
+        SharedPreferences sharedPref = getContext().getSharedPreferences(PREFS_NAME_USER , Context.MODE_PRIVATE);
+        String token = sharedPref.getString(getString(R.string.token_key), "");
+        String loginUser = sharedPref.getString(getString(R.string.login_key), "");
+
+        call = orderClient.findOrders(loginUser, token);
+
+
+        call.enqueue(new Callback<FindOrdersResponse>() {
             @Override
-            public void onResponse(Call<ItemsResponse> call, Response<ItemsResponse> response) {
+            public void onResponse(Call<FindOrdersResponse> call, Response<FindOrdersResponse> response) {
                 if(response.body().getCode() == 0){
-
-                    for(int i =0; i< response.body().getResult().getList().length; i++){
-                        listItem.add(new Item(response.body().getResult().getList()[i].getIdItem(), response.body().getResult().getList()[i].getNameItem(), response.body().getResult().getList()[i].getNameCategory() + ", " + response.body().getResult().getList()[i].getNameProduct(), response.body().getResult().getList()[i].getCpItem() + " " + response.body().getResult().getList()[i].getCityItem(), response.body().getResult().getList()[i].getPriceItem(), response.body().getResult().getList()[i].getFileExtensionsItem()));
+                    for(int i =0; i< response.body().getResult().getOrders().length; i++){
+                        listOrders.add(
+                                new Order(response.body().getResult().getOrders()[i].getIdOrder(), response.body().getResult().getOrders()[i].getDateOrder(),response.body().getResult().getOrders()[i].getTotalOrder(), response.body().getResult().getStatus()[i]));
                     }
                     adapter.notifyDataSetChanged();
                 }else{
+
                 }
             }
             @Override
-            public void onFailure(Call<ItemsResponse> call, Throwable t) {
+            public void onFailure(Call<FindOrdersResponse> call, Throwable t) {
             }
-        });*/
+        });
     }
 
 
