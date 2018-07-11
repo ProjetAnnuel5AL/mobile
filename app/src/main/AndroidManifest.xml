@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAeVj2_YaM5JxWGTn5ZEYiNTfvrMfHDhHY"/>
+            android:value="AIzaSyAeVj2_YaM5JxWGTn5ZEYiNTfvrMfHDhHY" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -31,7 +31,11 @@
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/CustomTheme"></activity>
+            android:theme="@style/CustomTheme" />
+        <activity
+            android:name=".activity.Home2Activity"
+            android:label="@string/title_activity_home2"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
