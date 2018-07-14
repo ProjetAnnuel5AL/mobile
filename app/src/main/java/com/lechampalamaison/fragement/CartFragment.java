@@ -33,8 +33,6 @@ public class CartFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     public static List<Item> itemList = new ArrayList<>();
-    private RecyclerView recyclerView;
-    private CartListAdapter cartListAdapter;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -79,9 +77,9 @@ public class CartFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
-        recyclerView = view.findViewById(R.id.recycler_cart);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_cart);
 
-        cartListAdapter = new CartListAdapter(itemList);
+        CartListAdapter cartListAdapter = new CartListAdapter(itemList);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setRecycledViewPool(new RecyclerView.RecycledViewPool());
@@ -98,7 +96,7 @@ public class CartFragment extends Fragment {
         return view;
     }
 
-    public void remplir() {
+    public static void remplir() {
         Item item1 = new Item("Fromage", "Très bon fromage ma gueule", 25);
         itemList.add(item1);
 
