@@ -17,4 +17,7 @@
     <string name="lbl_total">Total :</string>
     <string name="tv_total">0 €</string>
     <string name="btn_pladeorder">Place Order</string>
+    <string name="img_minusItem">Decrease quantity</string>
+    <string name="img_plusItem">Increase quantity</string>
+    <string name="img_removeItem">Remove item</string>
 </resources>
