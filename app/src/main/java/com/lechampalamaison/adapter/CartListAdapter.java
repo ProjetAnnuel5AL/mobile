@@ -8,29 +8,28 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lechampalamaison.R;
+import com.lechampalamaison.model.CartItem;
 import com.lechampalamaison.model.Item;
 
 import java.util.List;
 import java.util.Locale;
 
 public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyViewHolder>{
-    private List<Item> itemsList;
+    private List<CartItem> itemsList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView title;
-        private TextView description;
+        private TextView name;
         private TextView price;
 
         private MyViewHolder(View view) {
             super(view);
 
-            title = view.findViewById(R.id.tv_title);
-            description = view.findViewById(R.id.tv_description);
-            price = view.findViewById(R.id.tv_price);
+            name = view.findViewById(R.id.tv_itemName);
+            price = view.findViewById(R.id.tv_itemPrice);
         }
     }
 
-    public CartListAdapter(List<Item> itemsList) {
+    public CartListAdapter(List<CartItem> itemsList) {
         this.itemsList = itemsList;
     }
 
@@ -45,10 +44,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Item item = itemsList.get(position);
-        holder.title.setText(item.getTitle());
-        holder.description.setText(item.getDescription());
-        holder.price.setText(String.format(Locale.getDefault(), "%.2f", item.getPrice()));
+        CartItem item = itemsList.get(position);
+        holder.name.setText(item.getItem().getTitle());
+        holder.price.setText(String.format(Locale.getDefault(), "%.2f", item.getItem().getPrice()));
     }
 
     @Override

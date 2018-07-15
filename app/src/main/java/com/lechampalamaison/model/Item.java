@@ -12,10 +12,11 @@ public class Item {
 
     public Item() {}
 
-    public Item(String title, String description, double price) {
+    public Item(int id, String title, String description, double price) {
         this.title = title;
         this.description = description;
         this.price = price;
+        this.id = id;
     }
 
     public Item(int id, String title, String description, String localisation, double prix, String fileExtensionsItem) {

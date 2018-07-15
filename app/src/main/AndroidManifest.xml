@@ -28,6 +28,8 @@
             android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/CustomTheme" />
+        <activity android:name=".activity.DeliveryActivity" />
+        <activity android:name=".activity.PaymentDetailsActivity"></activity>
     </application>
 
 </manifest>

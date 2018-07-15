@@ -1,14 +1,13 @@
 package com.lechampalamaison.api.service;
 
-import com.lechampalamaison.api.model.ItemApi;
 import com.lechampalamaison.api.model.apiResponse.ItemResponse;
 import com.lechampalamaison.api.model.apiResponse.ItemsResponse;
+import com.lechampalamaison.api.model.apiResponse.QuantityResponse;
 
 
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ItemClient {
@@ -22,4 +21,6 @@ public interface ItemClient {
     @GET("item")
     Call<ItemResponse> item(@Query("idItem") int id );
 
+    @GET("item/verifyQuantity/{itemId}")
+    Call<QuantityResponse> itemQuantity(@Path("itemId") int itemId);
 }
