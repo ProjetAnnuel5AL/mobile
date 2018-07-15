@@ -25,11 +25,10 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/textViewOrderId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="monospace"
-                android:text="Commande n°1"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
@@ -40,37 +39,34 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/textViewOrderDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="monospace"
-                    android:text="Date :"
-                    android:textAlignment="textEnd"
+                    android:textAlignment="viewStart"
                     android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/textViewOrderStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="16/02/2016"
                     android:textAlignment="viewStart"
                     android:textColor="#000000" />
             </LinearLayout>
 
-            <TableLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/tableLayoutOrder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:shrinkColumns="*"
-                android:stretchColumns="*"
-                >
+                android:stretchColumns="*">
 
                 <TableRow
                     android:id="@+id/tableRow1"
-                    android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/border_top_bottom">
 
                     <TextView
@@ -85,7 +81,7 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/TextView04"
+                        android:id="@+id/TextView05"
                         android:layout_weight="1"
                         android:fontFamily="monospace"
                         android:gravity="center"
@@ -97,81 +93,6 @@
 
                 </TableRow>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:id="@+id/TextView034"
-                        android:layout_weight="1"
-                        android:text="20 x"
-                        android:textAlignment="center"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="#000000"
-                        android:textSize="14sp" />
-
-
-                    <TextView
-                        android:id="@+id/TextView04"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:padding="18dip"
-                        android:text="le produit de fou furieu de la mort\nlogin"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="14sp"
-                        android:background="@drawable/border_right" />
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:padding="18dip"
-                        android:text="20.00€\nfrais de port :   20.00€"
-                        android:textAlignment="textEnd"
-                        android:textColor="#000000"
-                        android:textSize="14sp" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:id="@+id/textView10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="20 x" />
-
-                    <TextView
-                        android:id="@+id/TextView04"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:padding="18dip"
-                        android:text="le produit de fou furieu de la mort\nlogin"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="14sp"
-                        android:background="@drawable/border_right" />
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:padding="18dip"
-                        android:text="20.00€\nfrais de port :   20.00€"
-                        android:textAlignment="textEnd"
-                        android:textColor="#000000"
-                        android:textSize="14sp" />
-                </TableRow>
-
             </TableLayout>
 
             <LinearLayout
@@ -181,13 +102,12 @@
                 android:background="@drawable/border_top_bottom">
 
                 <TextView
-                    android:id="@+id/textView13"
+                    android:id="@+id/textViewTotalOrder"
                     android:layout_width="8dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="monospace"
                     android:padding="20dip"
-                    android:text="Total : 20€"
                     android:textAlignment="textStart"
                     android:textColor="#000000" />
 
@@ -203,14 +123,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Facture" />
+                    android:text="Facture"
+                    android:visibility="invisible"
+                    />
 
                 <Button
                     android:id="@+id/button2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Aide" />
+                    android:text="Aide"
+                    android:visibility="invisible"/>
             </LinearLayout>
 
         </LinearLayout>
