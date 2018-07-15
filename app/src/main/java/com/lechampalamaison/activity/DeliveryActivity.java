@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.lechampalamaison.R;
+import com.lechampalamaison.api.service.OrderClient;
 import com.lechampalamaison.api.utils.Configuration;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
@@ -17,8 +18,12 @@ import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DeliveryActivity extends AppCompatActivity {
 
@@ -28,6 +33,12 @@ public class DeliveryActivity extends AppCompatActivity {
             .clientId(Configuration.PAYPAL_CLIENT_ID);
 
     private String amount = "150";
+    Retrofit.Builder builder = new Retrofit.Builder()
+            .baseUrl(Configuration.urlApi)
+            .addConverterFactory(GsonConverterFactory.create());
+
+    Retrofit retrofit = builder.build();
+    OrderClient orderClient = retrofit.create(OrderClient.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +68,11 @@ public class DeliveryActivity extends AppCompatActivity {
                 if (paymentConfirmation != null) {
                     try {
                         String paymentDetails = paymentConfirmation.toJSONObject().toString(4);
-                        System.out.println(paymentDetails);
+                        JSONObject details = new JSONObject(paymentConfirmation.toJSONObject().toString());
+
+                        String paymentId = details.getJSONObject("response").getString("id");
+
+                        // TODO : Requête de la mort qui tue
 
                         startActivity(new Intent(this, PaymentDetailsActivity.class)
                             .putExtra("PaymentDetails", paymentDetails)

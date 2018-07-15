@@ -10,9 +10,9 @@
         android:id="@+id/tv_successOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="232dp"
-        android:text="Bien joué ma couillasse !"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="236dp"
+        android:text="Votre paiement a bien été validé"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

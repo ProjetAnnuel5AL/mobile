@@ -65,7 +65,8 @@
                 android:layout_marginStart="10dp"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:focusableInTouchMode="true"/>
         </LinearLayout>
 
         <LinearLayout
