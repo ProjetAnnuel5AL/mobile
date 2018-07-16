@@ -54,23 +54,6 @@
             android:name=".Activity.AddressActivity"
             android:screenOrientation="portrait" />
 
-        <service
-            android:name=".notification.MyFirebaseInstanceIDService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".notification.MyFirebaseMessagingService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
         <activity
             android:name=".Activity.UpdatePasswordActivity"
             android:screenOrientation="portrait" />
@@ -83,8 +66,10 @@
         <activity
             android:name=".Activity.CollectiviteActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.FicheProducerActivity" />
-        <activity android:name=".Activity.EventActivity"></activity>
+        <activity android:name=".Activity.FicheProducerActivity" android:screenOrientation="portrait" />
+        <activity android:name=".Activity.EventActivity" android:screenOrientation="portrait" ></activity>
+        <activity android:name=".Activity.DeliveryActivity" android:screenOrientation="portrait"  />
+        <activity android:name=".Activity.PaymentDetailsActivity" android:screenOrientation="portrait" ></activity>
     </application>
 
 </manifest>

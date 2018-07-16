@@ -21,10 +21,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.lechampalamaison.loc.lechampalamaison.Fragment.CartFragment;
 import com.lechampalamaison.loc.lechampalamaison.Fragment.CollectiviteFragment;
 import com.lechampalamaison.loc.lechampalamaison.Fragment.HomeFragment;
 import com.lechampalamaison.loc.lechampalamaison.Fragment.ShopFragment;
-import com.lechampalamaison.loc.lechampalamaison.notification.Config;
+
 import com.lechampalamaison.loc.lechampalamaison.R;
 
 import java.util.ArrayList;
@@ -72,31 +73,6 @@ public class HomeActivity extends AppCompatActivity
             }
         }
 
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-                    FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
-
-                    displayFirebaseRegId();
-
-                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    // Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-                    Log.d("token", message);
-                    // txtMessage.setText(message);
-                }
-            }
-        };
-
-        //displayFirebaseRegId();
         initUI();
     }
 
@@ -111,28 +87,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
 
-    private void displayFirebaseRegId() {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-        sharedpreferences = getSharedPreferences(mypreferenceOption,Context.MODE_PRIVATE);
-        String regId = pref.getString("regId", null);
-
-
-        if (!TextUtils.isEmpty(regId)){
-            tokenFCM = regId;
-            if (sharedpreferences.contains(FCMOption)) {
-                if (!(sharedpreferences.getBoolean(FCMOption, true))) {
-                    Toast.makeText(this, "Push notification: " + tokenFCM, Toast.LENGTH_LONG).show();
-                    Log.d("token",tokenFCM);
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
-                    editor.putBoolean(FCMOption, true);
-                    editor.commit();
-
-                }
-            }
-
-        }
-
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -188,7 +142,7 @@ public class HomeActivity extends AppCompatActivity
                     case 2 :
                         return new ShopFragment();
                     case 3 :
-                        return new HomeFragment();
+                        return new CartFragment();
                     default:
                         return new HomeFragment();
                 }

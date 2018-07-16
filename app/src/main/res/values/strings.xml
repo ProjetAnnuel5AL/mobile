@@ -35,4 +35,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lbl_total">Total :</string>
+    <string name="tv_total">0 €</string>
+    <string name="btn_pladeorder">Passer commande</string>
+    <string name="img_minusItem">Decrease quantity</string>
+    <string name="img_plusItem">Increase quantity</string>
+    <string name="img_removeItem">Remove item</string>
+    <string name="tv_chooseDeliveryAddress">Choisissez une adresse de livraison</string>
+    <string name="tv_personnalAddress">Utiliser mon adresse personnelle</string>
+    <string name="tv_otherAddress">Utiliser l\'adresse suivante :</string>
+
 </resources>
