@@ -40,6 +40,8 @@ public class CartFragment extends Fragment {
 
     public static List<CartItem> itemList = new ArrayList<>();
     private TextView total;
+    private RecyclerView recyclerView;
+    private CartListAdapter cartListAdapter;
 
 
     private OnFragmentInteractionListener mListener;
@@ -71,9 +73,9 @@ public class CartFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_cart);
+        recyclerView = view.findViewById(R.id.recycler_cart);
 
-        CartListAdapter cartListAdapter = new CartListAdapter(itemList);
+        cartListAdapter = new CartListAdapter(itemList);
 
         this.total = view.findViewById(R.id.tv_total);
 
@@ -91,32 +93,63 @@ public class CartFragment extends Fragment {
         Button placeOrderButton = view.findViewById(R.id.btn_placeorder);
         placeOrderButton.setOnClickListener((View v) -> {
 
-
-
             Call<QuantityResponse> call;
             call = itemClient.itemQuantity(itemList);
 
             call.enqueue(new Callback<QuantityResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<QuantityResponse> call,@NonNull Response<QuantityResponse> response) {
-                    if (response.body().getCode() == 0) {
-                        //AZ : ICI verifier les qte
-                        Intent myIntent = new Intent(getActivity(), DeliveryActivity.class);
-                        startActivity(myIntent);
+                    if (itemList.size() > response.body().getResult().length) {
+                        Toast.makeText(getContext(), "Certains produits ont dû être retirés de votre panier", Toast.LENGTH_LONG).show();
+
+                        for (CartItem item : itemList) {
+                            int itemId = item.getItem().getId();
+                            int i = 0;
+
+                            while ((i < response.body().getResult().length) && (itemId != response.body().getResult()[i].getIdItem())) {
+                                i++;
+                            }
+
+                            if (i > response.body().getResult().length) {
+                                itemList.remove(0);
+                                // TODO: Remove items
+                            }
+                        }
                     } else {
-                       //Msg d erreur
+                        if (response.body().getCode() == 0) {
+                            boolean overQuantity = false;
+
+                            for (QuantityResponse.QuantityResult result : response.body().getResult()) {
+                                for (CartItem item : itemList) {
+                                    if (item.getItem().getId() == result.getIdItem() && item.getQuantity() > result.getQuantityItem()) {
+                                        Toast.makeText(getContext(), "Le produit " + item.getItem().getTitle() + " est indisponible pour la quantité demandée", Toast.LENGTH_LONG).show();
+                                        overQuantity = true;
+                                    }
+
+                                    if (overQuantity) {
+                                        break;
+                                    }
+                                }
+
+                                if (overQuantity) {
+                                    break;
+                                }
+                            }
+
+                            if (!overQuantity) {
+                                Intent myIntent = new Intent(getActivity(), DeliveryActivity.class);
+                                startActivity(myIntent);
+                            }
+                        }
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<QuantityResponse> call,@NonNull Throwable t) {
                     Toast.makeText(getContext(), "Impossible de se connecter à internet. Merci de vérifier votre connexion.",
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                 }
             });
-
-
-
         });
 
         // Inflate the layout for this fragment
@@ -124,10 +157,10 @@ public class CartFragment extends Fragment {
     }
 
     public void remplir() {
-        CartItem item1 = new CartItem(new Item(18, "Fromage", "Très bon fromage ma gueule", 25, 1), 1);
+        CartItem item1 = new CartItem(new Item(18, "Fromage", "Très bon fromage ma gueule", 25), 103);
         itemList.add(item1);
 
-        CartItem item2 = new CartItem(new Item(19, "Vin", "10 ans d'âge", 100, 1), 1);
+        CartItem item2 = new CartItem(new Item(19, "Vin", "10 ans d'âge", 100), 103);
         itemList.add(item2);
 
     }

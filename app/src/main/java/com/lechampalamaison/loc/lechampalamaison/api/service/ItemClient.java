@@ -32,7 +32,4 @@ public interface ItemClient {
 
     @POST("item/verifyQuantityItems")
     Call<QuantityResponse> itemQuantity(@Body List<CartItem> items);
-
-
-
 }
