@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <!--<group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Import" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Gallery" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Slideshow" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Tools" />
+    </group>-->
+
+    <item android:title="Utilisateur">
+        <menu>
+            <item
+                android:id="@+id/nav_pwd"
+                android:icon="@drawable/ic_lock_black_24dp"
+                android:title="Modifier mot de passe" />
+            <item
+                android:id="@+id/nav_mail"
+                android:icon="@drawable/ic_email_black_24dp"
+                android:title="Mon Profil" />
+            <item
+                android:id="@+id/nav_address"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Adresse de livraion" />
+            <item
+                android:id="@+id/nav_order"
+                android:icon="@drawable/ic_local_atm_black_24dp"
+                android:title="Mes commandes" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout_black_24dp"
+                android:title="Déconnexion" />
+        </menu>
+    </item>
+
+</menu>
