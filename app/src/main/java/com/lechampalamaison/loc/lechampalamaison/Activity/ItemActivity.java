@@ -130,7 +130,6 @@ public class ItemActivity extends AppCompatActivity  implements OnMapReadyCallba
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-
         Call<ItemResponse> call;
         call = itemClient.item(idItem);
 
@@ -206,8 +205,10 @@ public class ItemActivity extends AppCompatActivity  implements OnMapReadyCallba
                     deliveryTimeItem = response.body().getResult().getInfoItem().getDeliveryTimeItem();
                     descriptionItem =  response.body().getResult().getInfoItem().getDescriptionItem();
                     localisationItem = response.body().getResult().getInfoItem().getLocationItem();
-                    idDeliveryItem = response.body().getResult().getInfoItem().getIdDelivery();
+                    idDeliveryItem = response.body().getResult().getInfoItem().getIdDeliveryItem();
 
+
+                    System.out.println("test");
                 }else{
 
                 }

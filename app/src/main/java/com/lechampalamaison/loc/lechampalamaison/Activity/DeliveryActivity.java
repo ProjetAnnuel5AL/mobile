@@ -220,7 +220,7 @@ public class DeliveryActivity extends AppCompatActivity {
                             if (rb_femaleSexUser.isChecked()) {
                                 sex = "F";
                             } else {
-                                sex = "M";
+                                sex = "H";
                             }
 
                             Order.DeliveryAddress deliveryAddress = new Order().new DeliveryAddress(lastName, firstName, sex, address, city, cp);

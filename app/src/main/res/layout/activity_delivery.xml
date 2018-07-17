@@ -113,8 +113,8 @@
                     android:id="@+id/rb_maleSexeDelivery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="M"
-                    android:checked="true"/>
+                    android:checked="true"
+                    android:text="H" />
 
                 <RadioButton
                     android:id="@+id/rb_femaleSexeDelivery"

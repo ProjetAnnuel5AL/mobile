@@ -76,14 +76,14 @@ public class ItemResponse {
             private Double shippingCostItem;
             private Double quatityMaxOrderItem;
             private String deliveryTimeItem;
-            private int idDelivery;
+            private int idDeliveryItem;
 
-            public int getIdDelivery() {
-                return idDelivery;
+            public int getIdDeliveryItem() {
+                return idDeliveryItem;
             }
 
-            public void setIdDelivery(int idDelivery) {
-                this.idDelivery = idDelivery;
+            public void setIdDeliveryItem(int idDeliveryItem) {
+                this.idDeliveryItem = idDeliveryItem;
             }
 
             public String getDeliveryTimeItem() {
