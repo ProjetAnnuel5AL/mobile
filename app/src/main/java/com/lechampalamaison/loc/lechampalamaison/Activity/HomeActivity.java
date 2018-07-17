@@ -214,6 +214,7 @@ public class HomeActivity extends AppCompatActivity
                 navigationTabBar.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        model.setBadgeTitle("6");
                         model.showBadge();
                     }
                 }, 0 * 100);
