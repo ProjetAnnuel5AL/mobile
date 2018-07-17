@@ -18,7 +18,9 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +33,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.gson.Gson;
+import com.lechampalamaison.loc.lechampalamaison.Model.CartItem;
 import com.lechampalamaison.loc.lechampalamaison.R;
 import com.lechampalamaison.loc.lechampalamaison.api.model.Login;
 import com.lechampalamaison.loc.lechampalamaison.api.model.apiResponse.AuthResponse;
@@ -135,6 +139,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                 if(response.body().getCode() == 0){
+                    List<CartItem> itemList = new ArrayList<>();
+
+                    Gson gson = new Gson();
+                    String jsonCart = gson.toJson(itemList);
+
+
 
                     /*ArrayList<Cart> arrayListCart = new ArrayList<Cart>();
                     String jsonCart = new Gson().toJson(arrayListCart);
@@ -156,8 +166,9 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putLong(getString(R.string.date_token_key), millis);
                     editor.putString(getString(R.string.cart_key), null);
                     editor.putString(getString(R.string.paypal_key), null);
+                    editor.putString("cart", jsonCart);
 
-                    editor.commit();
+                    editor.apply();
                     onLoginSuccess(login.getLoginUser());
                 }else{
                     if(response.body().getCode() == 5){

@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lechampalamaison.loc.lechampalamaison.Model.CartItem;
+import com.lechampalamaison.loc.lechampalamaison.Model.Item;
 import com.lechampalamaison.loc.lechampalamaison.R;
 
 /**
@@ -42,7 +44,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override

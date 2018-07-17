@@ -126,7 +126,8 @@
                                 android:ems="10"
                                 android:inputType="number"
                                 android:text="1"
-                                android:textAlignment="textEnd" />
+                                android:textAlignment="textEnd"
+                                android:visibility="invisible"/>
 
                             <ImageButton
                                 android:id="@+id/imageButton"

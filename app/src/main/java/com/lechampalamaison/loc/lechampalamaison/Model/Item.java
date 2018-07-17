@@ -3,6 +3,8 @@ package com.lechampalamaison.loc.lechampalamaison.Model;
 
 import com.lechampalamaison.loc.lechampalamaison.api.utils.Configuration;
 
+import java.util.Objects;
+
 public class Item {
     String urlMainImg;
     private int id;
@@ -11,15 +13,13 @@ public class Item {
     private String localisation;
     private double price;
     private String fileExtensionsItem;
-    private int quantity;
 
 
-    public Item(int id, String title, String description, double price, int quantity) {
+    public Item(int id, String title, String description, double price) {
         this.title = title;
         this.description = description;
         this.price = price;
         this.id = id;
-        this.quantity = quantity;
     }
 
     public Item(int id, String title, String description, String localisation, double prix, String fileExtensionsItem) {
@@ -31,14 +31,6 @@ public class Item {
         this.fileExtensionsItem = fileExtensionsItem;
         String[] ext = fileExtensionsItem.split(";");
         this.urlMainImg = Configuration.urlApi + "itemPhotos/" + id + "/0."+ext[0];
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public String getTitle() {
@@ -95,5 +87,25 @@ public class Item {
 
     public void setFileExtensionsItem(String fileExtensionsItem) {
         this.fileExtensionsItem = fileExtensionsItem;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return id == item.id &&
+                Double.compare(item.price, price) == 0 &&
+                Objects.equals(urlMainImg, item.urlMainImg) &&
+                Objects.equals(title, item.title) &&
+                Objects.equals(description, item.description) &&
+                Objects.equals(localisation, item.localisation) &&
+                Objects.equals(fileExtensionsItem, item.fileExtensionsItem);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(urlMainImg, id, title, description, localisation, price, fileExtensionsItem);
     }
 }

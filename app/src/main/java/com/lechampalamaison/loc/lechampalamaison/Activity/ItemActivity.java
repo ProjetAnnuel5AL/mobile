@@ -1,7 +1,9 @@
 package com.lechampalamaison.loc.lechampalamaison.Activity;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +11,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +22,11 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.lechampalamaison.loc.lechampalamaison.Fragment.CartFragment;
+import com.lechampalamaison.loc.lechampalamaison.Model.Cart;
+import com.lechampalamaison.loc.lechampalamaison.Model.CartItem;
+import com.lechampalamaison.loc.lechampalamaison.Model.Item;
 import com.lechampalamaison.loc.lechampalamaison.R;
 import com.lechampalamaison.loc.lechampalamaison.api.model.apiResponse.ItemResponse;
 import com.lechampalamaison.loc.lechampalamaison.api.service.ItemClient;
@@ -35,6 +44,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.lechampalamaison.loc.lechampalamaison.Activity.LoginActivity.PREFS_NAME_USER;
+
 public class ItemActivity extends AppCompatActivity  implements OnMapReadyCallback {
 
     Retrofit.Builder builder = new Retrofit.Builder()
@@ -43,6 +54,8 @@ public class ItemActivity extends AppCompatActivity  implements OnMapReadyCallba
 
     Retrofit retrofit = builder.build();
     ItemClient itemClient = retrofit.create(ItemClient.class);
+
+    SharedPreferences sharedpreferences;
 
     public TextView textViewTitre;
     public TextView catProductItem;
@@ -172,6 +185,30 @@ public class ItemActivity extends AppCompatActivity  implements OnMapReadyCallba
             }
         });
 
+
+        ImageButton addItem = findViewById(R.id.imageButton);
+
+        addItem.setOnClickListener((View v) -> {
+            CartItem item1 = new CartItem(new Item(idItem, textViewTitre.getText().toString(), textViewDesc.getText().toString(), Double.parseDouble(textViewPrice.getText().toString().substring(0, textViewPrice.getText().toString().length() - 1))), 1);
+
+            Gson gson = new Gson();
+            String jsonCart;
+            List<CartItem> itemList = new ArrayList<>();
+
+            if (CartFragment.itemList != null) {
+                CartFragment.itemList.add(item1);
+                jsonCart = gson.toJson(CartFragment.itemList);
+            } else {
+                itemList.add(item1);
+                jsonCart = gson.toJson(itemList);
+            }
+
+            SharedPreferences sharedPref = ItemActivity.this.getSharedPreferences(PREFS_NAME_USER, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            editor.putString("cart", jsonCart);
+            editor.apply();
+        });
     }
 
 
