@@ -75,6 +75,24 @@ public class ItemResponse {
             private String photoURL;
             private Double shippingCostItem;
             private Double quatityMaxOrderItem;
+            private String deliveryTimeItem;
+            private int idDelivery;
+
+            public int getIdDelivery() {
+                return idDelivery;
+            }
+
+            public void setIdDelivery(int idDelivery) {
+                this.idDelivery = idDelivery;
+            }
+
+            public String getDeliveryTimeItem() {
+                return deliveryTimeItem;
+            }
+
+            public void setDeliveryTimeItem(String deliveryTimeItem) {
+                this.deliveryTimeItem = deliveryTimeItem;
+            }
 
             public Double getShippingCostItem() {
                 return shippingCostItem;

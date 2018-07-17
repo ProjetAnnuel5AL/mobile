@@ -21,16 +21,23 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lechampalamaison.loc.lechampalamaison.Fragment.CartFragment;
 import com.lechampalamaison.loc.lechampalamaison.Fragment.CollectiviteFragment;
 import com.lechampalamaison.loc.lechampalamaison.Fragment.HomeFragment;
 import com.lechampalamaison.loc.lechampalamaison.Fragment.ShopFragment;
 
+import com.lechampalamaison.loc.lechampalamaison.Model.CartItem;
 import com.lechampalamaison.loc.lechampalamaison.R;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import devlight.io.library.ntb.NavigationTabBar;
+
+import static com.lechampalamaison.loc.lechampalamaison.Activity.LoginActivity.PREFS_NAME_USER;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,8 +57,6 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -137,9 +142,9 @@ public class HomeActivity extends AppCompatActivity
                 switch (position) {
                     case 0 :
                         return new HomeFragment();
-                    case 1 :
-                        return new CollectiviteFragment();
                     case 2 :
+                        return new CollectiviteFragment();
+                    case 1 :
                         return new ShopFragment();
                     case 3 :
                         return new CartFragment();
@@ -162,16 +167,16 @@ public class HomeActivity extends AppCompatActivity
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_group_black_24dp),
-                        Color.parseColor(colors[2])
-                ).title("collectivite")
+                        getResources().getDrawable(R.drawable.ic_shopping_basket_black_24dp),
+                        Color.parseColor(colors[4])
+                ).title("Le champ")
                         .build()
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_shopping_basket_black_24dp),
-                        Color.parseColor(colors[4])
-                ).title("Le champ")
+                        getResources().getDrawable(R.drawable.ic_group_black_24dp),
+                        Color.parseColor(colors[2])
+                ).title("collectivite")
                         .build()
         );
         models.add(
@@ -214,8 +219,19 @@ public class HomeActivity extends AppCompatActivity
                 navigationTabBar.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        model.setBadgeTitle("6");
-                        model.showBadge();
+
+                        sharedpreferences = getSharedPreferences(PREFS_NAME_USER, Context.MODE_PRIVATE);
+                        String jsonCartSaved = sharedpreferences.getString("cart", null);
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ArrayList<CartItem>>() {}.getType();
+                        List<CartItem> itemExistant = gson.fromJson(jsonCartSaved, type);
+                        if(itemExistant != null){
+                            model.setBadgeTitle(String.valueOf(itemExistant.size()));
+                        }else{
+                            model.setBadgeTitle("0");
+                        }
+
+                        //model.showBadge();
                     }
                 }, 0 * 100);
 

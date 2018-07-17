@@ -23,9 +23,32 @@ public class Order {
 
     public class Cart {
         private int id;
-        private double prixU;
         private int qte;
-        private double shippingCost;
+        private Double qteMax;
+        private String unit;
+        private String category;
+        private String product;
+        private String title;
+        private double prixU;
+        private Double shippingCost;
+        private String deliveryTime;
+        private int idDelivery;
+        private String img;
+
+        public Cart(int id, int qte, Double qteMax, String unit, String category, String product, String title, double prixU, Double shippingCost, String deliveryTime, int idDelivery, String img) {
+            this.id = id;
+            this.qte = qte;
+            this.qteMax = qteMax;
+            this.unit = unit;
+            this.category = category;
+            this.product = product;
+            this.title = title;
+            this.prixU = prixU;
+            this.shippingCost = shippingCost;
+            this.deliveryTime = deliveryTime;
+            this.idDelivery = idDelivery;
+            this.img = img;
+        }
 
         public Cart (int id, double prixU, int qte, double shippingCost) {
             this.id = id;

@@ -86,7 +86,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         CartItem item = itemsList.get(position);
         holder.name.setText(item.getItem().getTitle());
-        holder.price.setText(String.format(Locale.getDefault(), "%.2f", item.getItem().getPrice()) + " €");
+        holder.price.setText(String.format(Locale.getDefault(), "%.2f", item.getItem().getPrice()) + " €\nFrais de port : "+String.format(Locale.getDefault(), "%.2f", item.getItem().getShippingCost()) );
         holder.quantity.setText(String.valueOf(item.getQuantity()));
         calculateTotal();
 
@@ -152,7 +152,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
         double total = 0;
 
         for(CartItem item : itemsList) {
-            total += item.getItem().getPrice() * item.getQuantity();
+            total += item.getItem().getPrice() * item.getQuantity() + item.getItem().getShippingCost();
         }
 
         this.test.setText(String.valueOf(total) + " €");

@@ -23,6 +23,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lechampalamaison.loc.lechampalamaison.Fragment.CartFragment;
 import com.lechampalamaison.loc.lechampalamaison.Model.Cart;
 import com.lechampalamaison.loc.lechampalamaison.Model.CartItem;
@@ -32,6 +33,7 @@ import com.lechampalamaison.loc.lechampalamaison.api.model.apiResponse.ItemRespo
 import com.lechampalamaison.loc.lechampalamaison.api.service.ItemClient;
 import com.lechampalamaison.loc.lechampalamaison.api.utils.Configuration;
 
+import java.lang.reflect.Type;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,22 @@ public class ItemActivity extends AppCompatActivity  implements OnMapReadyCallba
     ItemClient itemClient = retrofit.create(ItemClient.class);
 
     SharedPreferences sharedpreferences;
+
+    //champ pour pannier
+    public double priceItem = 0.0;
+
+    public int id;
+    public int qteItem;
+    public Double qteMaxItem;
+    public String unitItem;
+    public String categoryItem;
+    public String productItem;
+    public String titleItem;
+    public double shippingCostItem;
+    public String deliveryTimeItem;
+    public int idDeliveryItem;
+    public String descriptionItem;
+    public String localisationItem;
 
     public TextView textViewTitre;
     public TextView catProductItem;
@@ -158,6 +176,7 @@ public class ItemActivity extends AppCompatActivity  implements OnMapReadyCallba
                     Double lng =  Double.parseDouble(latlng[1]);
                     setMapItem(lat,lng, response.body().getResult().getInfoItem().getAddressItem(), response.body().getResult().getInfoItem().getCityItem(), response.body().getResult().getInfoItem().getCpItem());
                     Double price = (double) Math.round(response.body().getResult().getInfoItem().getPriceItem() * 100) / 100;
+
                     Double shippingCost = (double) Math.round(response.body().getResult().getInfoItem().getShippingCostItem() * 100) / 100;
                     NumberFormat format = NumberFormat.getInstance();
                     format.setMinimumFractionDigits(2);
@@ -174,6 +193,21 @@ public class ItemActivity extends AppCompatActivity  implements OnMapReadyCallba
 
                     slider.addSlides(slideList);
 
+                    //on set les champ pannier :
+
+                    priceItem = price;
+                    qteItem = 1;
+                    qteMaxItem = response.body().getResult().getInfoItem().getQuatityMaxOrderItem();
+                    unitItem = response.body().getResult().getInfoItem().getNameUnit();
+                    categoryItem =  response.body().getResult().getInfoItem().getNameCategory();
+                    productItem = response.body().getResult().getInfoItem().getNameProduct();
+                    titleItem = response.body().getResult().getInfoItem().getNameItem();
+                    shippingCostItem = response.body().getResult().getInfoItem().getShippingCostItem();
+                    deliveryTimeItem = response.body().getResult().getInfoItem().getDeliveryTimeItem();
+                    descriptionItem =  response.body().getResult().getInfoItem().getDescriptionItem();
+                    localisationItem = response.body().getResult().getInfoItem().getLocationItem();
+                    idDeliveryItem = response.body().getResult().getInfoItem().getIdDelivery();
+
                 }else{
 
                 }
@@ -189,28 +223,51 @@ public class ItemActivity extends AppCompatActivity  implements OnMapReadyCallba
         ImageButton addItem = findViewById(R.id.imageButton);
 
         addItem.setOnClickListener((View v) -> {
-            CartItem item1 = new CartItem(new Item(idItem, textViewTitre.getText().toString(), textViewDesc.getText().toString(), Double.parseDouble(textViewPrice.getText().toString().substring(0, textViewPrice.getText().toString().length() - 1))), 1);
 
+            //on vérifie que pas dans le panier;
+            sharedpreferences = getSharedPreferences(PREFS_NAME_USER, Context.MODE_PRIVATE);
+            String jsonCartSaved = sharedpreferences.getString("cart", null);
             Gson gson = new Gson();
-            String jsonCart;
-            List<CartItem> itemList = new ArrayList<>();
+            Type type = new TypeToken<ArrayList<CartItem>>() {}.getType();
+            List<CartItem> itemExistant = gson.fromJson(jsonCartSaved, type);
 
-            if (CartFragment.itemList != null) {
-                CartFragment.itemList.add(item1);
-                jsonCart = gson.toJson(CartFragment.itemList);
-            } else {
-                itemList.add(item1);
-                jsonCart = gson.toJson(itemList);
+            boolean isInCart = false;
+            if (itemExistant != null){
+                for (int i = 0; i < itemExistant.size(); i++) {
+                    if (itemExistant.get(i).getItem().getId() == idItem) {
+                        isInCart = true;
+                        break;
+                    }
+                }
             }
 
-            SharedPreferences sharedPref = ItemActivity.this.getSharedPreferences(PREFS_NAME_USER, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
+            if(isInCart == true){
+                Toast.makeText(this, "Produit déjà dans le pannier. Rdv sur dans le pannier pour modifier la quantité.", Toast.LENGTH_SHORT).show();
+            }else{
+                 CartItem item1 = new CartItem(new Item(null, idItem, qteItem, qteMaxItem, unitItem, categoryItem, productItem, titleItem, priceItem, priceItem, shippingCostItem, idDeliveryItem, deliveryTimeItem, descriptionItem, localisationItem, "")
+                         , 1);
 
-            editor.putString("cart", jsonCart);
-            editor.apply();
+                String jsonCart;
+                List<CartItem> itemList = new ArrayList<>();
+
+                if (CartFragment.itemList != null) {
+                    CartFragment.itemList.add(item1);
+                    jsonCart = gson.toJson(CartFragment.itemList);
+                } else {
+                    itemList.add(item1);
+                    jsonCart = gson.toJson(itemList);
+                }
+
+                SharedPreferences sharedPref = ItemActivity.this.getSharedPreferences(PREFS_NAME_USER, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                editor.putString("cart", jsonCart);
+                editor.apply();
+                Toast.makeText(this, "Produit ajouté au pannier.", Toast.LENGTH_SHORT).show();
+            }
+
         });
     }
-
 
 
     @Override

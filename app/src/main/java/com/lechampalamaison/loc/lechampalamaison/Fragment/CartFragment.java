@@ -192,4 +192,18 @@ public class CartFragment extends Fragment {
 
         void onFragmentInteraction(Uri uri);
     }
+
+    @Override
+    public void onAttach(Context context) {
+        System.out.println("in");
+        super.onAttach(context);
+    }
+
+
+    @Override
+    public void onResume() {
+        System.out.println("in");
+        super.onResume();
+    }
+
 }

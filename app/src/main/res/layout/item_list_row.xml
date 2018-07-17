@@ -58,7 +58,7 @@
             android:id="@+id/tv_itemQte"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="top|center"/>
 
         <ImageView
             android:id="@+id/img_plusItem"

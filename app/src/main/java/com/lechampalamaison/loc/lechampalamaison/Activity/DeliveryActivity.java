@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lechampalamaison.loc.lechampalamaison.Fragment.CartFragment;
 import com.lechampalamaison.loc.lechampalamaison.Model.CartItem;
 import com.lechampalamaison.loc.lechampalamaison.R;
@@ -33,7 +34,9 @@ import com.paypal.android.sdk.payments.PaymentConfirmation;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +55,7 @@ public class DeliveryActivity extends AppCompatActivity {
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
             .clientId(Configuration.PAYPAL_CLIENT_ID);
 
-    private String amount = "150";
+    private Double amount = 0.0;
 
     SharedPreferences sharedpreferences;
 
@@ -65,23 +68,57 @@ public class DeliveryActivity extends AppCompatActivity {
     UserClient userClient = retrofit.create(UserClient.class);
 
     private RadioButton rb_personnalAddress;
+    private RadioButton rb_otherAddress;
     private EditText et_lastname;
     private EditText et_firstname;
     private RadioButton rb_femaleSexUser;
     private EditText et_addressUser;
     private EditText et_cityUser;
     private EditText et_cpUser;
-
+    Button btnPaypal ;
+    public static Activity fa;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery);
-
+        fa = this;
         Intent intent = new Intent(this, PayPalService.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
         startService(intent);
 
-        Button btnPaypal = findViewById(R.id.btn_continueOrder);
+
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME_USER , Context.MODE_PRIVATE);
+        String token = sharedPref.getString(getString(R.string.token_key), "");
+        String loginUser = sharedPref.getString(getString(R.string.login_key), "");
+
+        rb_personnalAddress = findViewById(R.id.rb_personnalAddress);
+        rb_otherAddress = findViewById(R.id.rb_otherAddress);
+
+        Call<FindAddressReponse> call = userClient.findAddress(loginUser, token);
+
+        call.enqueue(new Callback<FindAddressReponse>() {
+            @Override
+            public void onResponse(Call<FindAddressReponse> call, Response<FindAddressReponse> response) {
+                if(response.body().getCode() == 0){
+                    if(response.body().getResult().getLastNameUser() == null ||response.body().getResult().getLastNameUser().equals("")){
+                        rb_personnalAddress.setChecked(false);
+                        rb_personnalAddress.setVisibility(View.INVISIBLE);
+                        rb_otherAddress.setChecked(true);
+                        rb_otherAddress.setVisibility(View.INVISIBLE);
+                    }
+                }else{
+                    //Toast.makeText(getApplicationContext(), "Erreur lors du chargement de l'adresse", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<FindAddressReponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Impossible de se connecter à internet. Merci de vérifier votre connexion.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnPaypal = findViewById(R.id.btn_continueOrder);
+
         rb_personnalAddress = findViewById(R.id.rb_personnalAddress);
         et_lastname = findViewById(R.id.et_lastnameDelivery);
         et_firstname = findViewById(R.id.et_firstnameDelivery);
@@ -116,10 +153,18 @@ public class DeliveryActivity extends AppCompatActivity {
                         String token = sharedpreferences.getString("token", "");
 
                         List<Order.Cart> cartList = new ArrayList<>();
+
                         for (CartItem item : CartFragment.itemList) {
-                            Order.Cart cartElement = new Order().new Cart(item.getItem().getId(), item.getItem().getPrice(), item.getQuantity(), 10);
+
+                            Order.Cart cartElement = new Order().new Cart(item.getItem().getId(), item.getItem().getQte(),
+                                    item.getItem().getQteMax(), item.getItem().getUnit(), item.getItem().getCategory(),
+                                    item.getItem().getProduct(), item.getItem().getTitle(), item.getItem().getPrixU(), item.getItem().getShippingCost(),
+                                    item.getItem().getDeliveryTime(), item.getItem().getIdDeliveryItem(), "");
                             cartList.add(cartElement);
+
+
                         }
+
 
                         Order.PaymentDetail paymentDetail = new Order().new PaymentDetail(paymentId);
 
@@ -214,6 +259,26 @@ public class DeliveryActivity extends AppCompatActivity {
     }
 
     private void processPayment() {
+
+        sharedpreferences = getSharedPreferences(PREFS_NAME_USER, Context.MODE_PRIVATE);
+        String jsonCartSaved = sharedpreferences.getString("cart", null);
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<CartItem>>() {}.getType();
+        List<CartItem> itemExistant = gson.fromJson(jsonCartSaved, type);
+
+        double totalPaypal = 0.0;
+
+        for(int i = 0; i<itemExistant.size(); i++){
+            int qteTest = itemExistant.get(i).getQuantity();
+            totalPaypal += (itemExistant.get(i).getItem().getPrixU() * qteTest) + itemExistant.get(i).getItem().getShippingCost();
+        }
+
+        NumberFormat format= NumberFormat.getInstance();
+        format.setMinimumFractionDigits(2);
+
+
+        amount = totalPaypal;
+
         if (!rb_personnalAddress.isChecked()) {
             String lastName = et_lastname.getText().toString();
             String firstName = et_firstname.getText().toString();
@@ -224,20 +289,25 @@ public class DeliveryActivity extends AppCompatActivity {
             if (lastName.equals("") || firstName.equals("") || address.equals("") || city.equals("") || cp.equals("")) {
                 Toast.makeText(getApplicationContext(), "Veuillez remplir tous les champs", Toast.LENGTH_LONG).show();
             } else {
-                PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(String.valueOf(amount)), "EUR", "Please pay motherfucker", PayPalPayment.PAYMENT_INTENT_SALE);
+                btnPaypal.setEnabled(false);
+                PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(String.valueOf(amount)), "EUR", "Total", PayPalPayment.PAYMENT_INTENT_SALE);
 
                 Intent intent = new Intent(this, PaymentActivity.class);
                 intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
                 intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payPalPayment);
                 startActivityForResult(intent, PAYPAL_REQUEST_CODE);
+
             }
         } else {
+                btnPaypal.setEnabled(false);
+
                 PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(String.valueOf(amount)), "EUR", "Total : ", PayPalPayment.PAYMENT_INTENT_SALE);
 
-            Intent intent = new Intent(this, PaymentActivity.class);
-            intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
-            intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payPalPayment);
-            startActivityForResult(intent, PAYPAL_REQUEST_CODE);
+                Intent intent = new Intent(this, PaymentActivity.class);
+                intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+                intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payPalPayment);
+                startActivityForResult(intent, PAYPAL_REQUEST_CODE);
+
         }
     }
 }

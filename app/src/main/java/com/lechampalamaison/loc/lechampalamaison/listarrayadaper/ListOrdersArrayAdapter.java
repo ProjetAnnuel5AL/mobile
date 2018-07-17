@@ -82,7 +82,9 @@ public class ListOrdersArrayAdapter extends ArrayAdapter<Order> {
         SharedPreferences sharedPref = getContext().getSharedPreferences(PREFS_NAME_USER , Context.MODE_PRIVATE);
         String token = sharedPref.getString("token", "");
         String loginUser = sharedPref.getString("login", "");
-        call = orderClient.findOrderLignes(loginUser, token, values.get(position).getIdOrder());
+
+        int idO = values.get(position).getIdOrder();
+        call = orderClient.findOrderLignes(loginUser, token, idO);
 
         call.enqueue(new Callback<FindOrderLignesResponse>() {
             @Override
