@@ -1,6 +1,8 @@
 package com.lechampalamaison.loc.lechampalamaison.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,8 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lechampalamaison.loc.lechampalamaison.Activity.DeliveryActivity;
-import com.lechampalamaison.loc.lechampalamaison.Activity.HomeActivity;
+import com.lechampalamaison.loc.lechampalamaison.Activity.LoginActivity;
 import com.lechampalamaison.loc.lechampalamaison.Model.CartItem;
 import com.lechampalamaison.loc.lechampalamaison.Model.Item;
 import com.lechampalamaison.loc.lechampalamaison.R;
@@ -26,6 +30,7 @@ import com.lechampalamaison.loc.lechampalamaison.api.service.ItemClient;
 import com.lechampalamaison.loc.lechampalamaison.api.utils.Configuration;
 import com.lechampalamaison.loc.lechampalamaison.listarrayadaper.CartListAdapter;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +40,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.lechampalamaison.loc.lechampalamaison.Activity.LoginActivity.PREFS_NAME_USER;
+
 
 public class CartFragment extends Fragment {
 
@@ -43,6 +50,7 @@ public class CartFragment extends Fragment {
     private RecyclerView recyclerView;
     private CartListAdapter cartListAdapter;
 
+    SharedPreferences sharedpreferences;
 
     private OnFragmentInteractionListener mListener;
     Retrofit.Builder builder = new Retrofit.Builder()
@@ -64,20 +72,25 @@ public class CartFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        sharedpreferences = getActivity().getSharedPreferences(PREFS_NAME_USER, Context.MODE_PRIVATE);
+        String jsonCart = sharedpreferences.getString("cart", null);
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<CartItem>>() {}.getType();
+        itemList = gson.fromJson(jsonCart, type);
+
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
         recyclerView = view.findViewById(R.id.recycler_cart);
 
-        cartListAdapter = new CartListAdapter(itemList);
+        total = view.findViewById(R.id.tv_total);
 
-        this.total = view.findViewById(R.id.tv_total);
+        cartListAdapter = new CartListAdapter(itemList, total, getContext());
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setRecycledViewPool(new RecyclerView.RecycledViewPool());
@@ -86,44 +99,58 @@ public class CartFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(cartListAdapter);
 
-
-        remplir();
-        calculateTotal();
-
         Button placeOrderButton = view.findViewById(R.id.btn_placeorder);
         placeOrderButton.setOnClickListener((View v) -> {
+            if (!itemList.isEmpty()) {
+                Call<QuantityResponse> call;
+                call = itemClient.itemQuantity(itemList);
 
-            Call<QuantityResponse> call;
-            call = itemClient.itemQuantity(itemList);
+                call.enqueue(new Callback<QuantityResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<QuantityResponse> call, @NonNull Response<QuantityResponse> response) {
+                        int responseSize;
 
-            call.enqueue(new Callback<QuantityResponse>() {
-                @Override
-                public void onResponse(@NonNull Call<QuantityResponse> call,@NonNull Response<QuantityResponse> response) {
-                    if (itemList.size() > response.body().getResult().length) {
-                        Toast.makeText(getContext(), "Certains produits ont dû être retirés de votre panier", Toast.LENGTH_LONG).show();
-
-                        for (CartItem item : itemList) {
-                            int itemId = item.getItem().getId();
-                            int i = 0;
-
-                            while ((i < response.body().getResult().length) && (itemId != response.body().getResult()[i].getIdItem())) {
-                                i++;
-                            }
-
-                            if (i > response.body().getResult().length) {
-                                itemList.remove(0);
-                                // TODO: Remove items
-                            }
+                        if (response.body().getResult() == null) {
+                            responseSize = 0;
+                        } else {
+                            responseSize = response.body().getResult().length;
                         }
-                    } else {
-                        if (response.body().getCode() == 0) {
-                            boolean overQuantity = false;
 
-                            for (QuantityResponse.QuantityResult result : response.body().getResult()) {
-                                for (CartItem item : itemList) {
-                                    if (item.getItem().getId() == result.getIdItem() && item.getQuantity() > result.getQuantityItem()) {
-                                        Toast.makeText(getContext(), "Le produit " + item.getItem().getTitle() + " est indisponible pour la quantité demandée", Toast.LENGTH_LONG).show();
-                                        overQuantity = true;
+                        if (itemList.size() > responseSize) {
+                            List<Integer> toRemove = new ArrayList<>();
+
+                            for (CartItem item : itemList) {
+                                int itemId = item.getItem().getId();
+                                int i = 0;
+
+                                while ((i < responseSize) && (itemId != response.body().getResult()[i].getIdItem())) {
+                                    i++;
+                                }
+
+                                if (i == responseSize) {
+                                    toRemove.add(0);
+                                }
+                            }
+
+                            for (int pos : toRemove) {
+                                cartListAdapter.removeItem(pos);
+                            }
+
+                            Toast.makeText(getContext(), "Certains produits ont dû être retirés de votre panier", Toast.LENGTH_LONG).show();
+                        } else {
+                            if (response.body().getCode() == 0) {
+                                boolean overQuantity = false;
+
+                                for (QuantityResponse.QuantityResult result : response.body().getResult()) {
+                                    for (CartItem item : itemList) {
+                                        if (item.getItem().getId() == result.getIdItem() && item.getQuantity() > result.getQuantityItem()) {
+                                            Toast.makeText(getContext(), "Le produit " + item.getItem().getTitle() + " est indisponible pour la quantité demandée", Toast.LENGTH_LONG).show();
+                                            overQuantity = true;
+                                        }
+
+                                        if (overQuantity) {
+                                            break;
+                                        }
                                     }
 
                                     if (overQuantity) {
@@ -131,50 +158,28 @@ public class CartFragment extends Fragment {
                                     }
                                 }
 
-                                if (overQuantity) {
-                                    break;
+                                if (!overQuantity) {
+                                    Intent myIntent = new Intent(getActivity(), DeliveryActivity.class);
+                                    startActivity(myIntent);
                                 }
-                            }
-
-                            if (!overQuantity) {
-                                Intent myIntent = new Intent(getActivity(), DeliveryActivity.class);
-                                startActivity(myIntent);
                             }
                         }
                     }
-                }
 
-                @Override
-                public void onFailure(@NonNull Call<QuantityResponse> call,@NonNull Throwable t) {
-                    Toast.makeText(getContext(), "Impossible de se connecter à internet. Merci de vérifier votre connexion.",
-                            Toast.LENGTH_LONG).show();
-                }
-            });
+                    @Override
+                    public void onFailure(@NonNull Call<QuantityResponse> call, @NonNull Throwable t) {
+                        Toast.makeText(getContext(), "Impossible de se connecter à internet. Merci de vérifier votre connexion.",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                Toast.makeText(getContext(), "Votre panier est vide", Toast.LENGTH_LONG).show();
+            }
         });
 
         // Inflate the layout for this fragment
         return view;
     }
-
-    public void remplir() {
-        CartItem item1 = new CartItem(new Item(18, "Fromage", "Très bon fromage ma gueule", 25), 103);
-        itemList.add(item1);
-
-        CartItem item2 = new CartItem(new Item(19, "Vin", "10 ans d'âge", 100), 103);
-        itemList.add(item2);
-
-    }
-
-    public void calculateTotal(){
-        double total = 0;
-
-        for(CartItem item : itemList) {
-            total += item.getItem().getPrice();
-        }
-
-        this.total.setText(String.valueOf(total) + " €");
-    }
-
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

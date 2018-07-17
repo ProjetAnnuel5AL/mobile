@@ -161,7 +161,7 @@ public class AddressActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }else{
 
-                    Toast.makeText(getApplicationContext(), "Erreur lors du chargment de l'adresse", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Erreur lors du chargement de l'adresse", Toast.LENGTH_SHORT).show();
                     onUpdateAddressFailed();
                 }
             }

@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/tv_itemName"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="10"
@@ -29,8 +29,7 @@
             android:layout_weight="1"
             android:contentDescription="@string/img_minusItem"
             android:focusable="true"
-            android:clickable="true"
-            android:pointerIcon="hand"/>
+            android:clickable="true"/>
     </LinearLayout>
 
     <LinearLayout
@@ -41,7 +40,7 @@
 
         <TextView
             android:id="@+id/tv_itemPrice"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
@@ -53,8 +52,7 @@
             android:layout_marginStart="40dp"
             android:contentDescription="@string/img_minusItem"
             android:focusable="true"
-            android:clickable="true"
-            android:pointerIcon="hand"/>
+            android:clickable="true"/>
 
         <TextView
             android:id="@+id/tv_itemQte"
@@ -69,7 +67,6 @@
             app:srcCompat="@drawable/ic_plus"
             android:contentDescription="@string/img_plusItem"
             android:focusable="true"
-            android:clickable="true"
-            android:pointerIcon="hand"/>
+            android:clickable="true"/>
     </LinearLayout>
 </LinearLayout>
